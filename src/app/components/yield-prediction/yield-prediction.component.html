@@ -1,0 +1,115 @@
+<div class="prediction-container animate-fade-in">
+  <div class="header-section mb-6">
+    <h2 class="mb-1 text-secondary">Yield Prediction Calculator</h2>
+    <p>Estimate your crop yield and expected revenue based on environmental factors.</p>
+  </div>
+
+  <div class="grid grid-cols-12 gap-6">
+    <!-- Calculator Form -->
+    <div class="glass-card form-area" style="grid-column: span 5;">
+      <h3 class="mb-4">Prediction Parameters</h3>
+      
+      <form (ngSubmit)="calculateYield()" #predictionForm="ngForm" class="flex-col gap-4">
+        <div class="form-group">
+          <label class="form-label">Crop Type</label>
+          <select class="form-control" name="crop" [(ngModel)]="calcData.crop">
+            <option value="Tomato">Tomato</option>
+            <option value="Callaloo">Callaloo</option>
+            <option value="Pepper">Sweet Pepper</option>
+            <option value="Yam">Yellow Yam</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="form-group">
+            <label class="form-label">Area (Acres)</label>
+            <input type="number" class="form-control" name="area" [(ngModel)]="calcData.area" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Soil Quality</label>
+            <select class="form-control" name="soil" [(ngModel)]="calcData.soil">
+              <option value="Excellent">Excellent</option>
+              <option value="Good">Good</option>
+              <option value="Fair">Fair</option>
+              <option value="Poor">Poor</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group mb-4">
+          <label class="form-label">Expected Weather Pattern</label>
+          <select class="form-control" name="weather" [(ngModel)]="calcData.weather">
+            <option value="Optimal">Optimal (Avg. Temp, Good Rain)</option>
+            <option value="Dry">Dry (High Temp, Low Rain)</option>
+            <option value="Wet">Wet (High Rainfall)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-primary w-full" [disabled]="isCalculating">
+          <span *ngIf="!isCalculating">Calculate Forecast 📈</span>
+          <span *ngIf="isCalculating" class="animate-pulse">Crunching Numbers...</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Prediction Results -->
+    <div class="results-area" style="grid-column: span 7;">
+      <!-- Empty State -->
+      <div *ngIf="!hasPrediction && !isCalculating" class="empty-state glass-card flex-col items-center justify-center text-center">
+        <div class="empty-icon mb-4">🧮</div>
+        <h4 class="mb-2">Ready to Calculate</h4>
+        <p>Enter your crop and land parameters to generate a yield forecast.</p>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="isCalculating" class="loading-state glass-card flex-col items-center justify-center text-center">
+        <div class="spinner mb-4 spinner-yellow"></div>
+        <h4 class="mb-2 text-secondary">Simulating Growth Cycles</h4>
+        <p>Applying historical algorithms and weather models to your parameters...</p>
+      </div>
+
+      <!-- Results State -->
+      <div *ngIf="hasPrediction && !isCalculating" class="animate-fade-in">
+        <h3 class="mb-4">Forecast Results: {{calcData.crop}}</h3>
+        
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div class="glass-card stat-box">
+            <div class="stat-label">Estimated Total Yield</div>
+            <div class="stat-value text-primary">{{predictedYield | number}} kg</div>
+            <div class="stat-subtext mt-1 text-xs text-muted">avg {{predictedYieldPerAcre | number}} kg / acre</div>
+          </div>
+          <div class="glass-card stat-box">
+            <div class="stat-label">Growth Duration</div>
+            <div class="stat-value text-secondary">{{growthDuration}} Days</div>
+            <div class="stat-subtext mt-1 text-xs text-muted">until first harvest</div>
+          </div>
+        </div>
+
+        <div class="glass-card detail-card">
+          <h4 class="mb-3">Factor Analysis</h4>
+          <div class="factor-row">
+            <span>Soil Impact ({{calcData.soil}})</span>
+            <span class="text-primary" *ngIf="calcData.soil === 'Excellent' || calcData.soil === 'Good'">+ Positive</span>
+            <span class="text-secondary" *ngIf="calcData.soil === 'Fair' || calcData.soil === 'Poor'">- Negative</span>
+          </div>
+          <div class="factor-row">
+            <span>Weather Impact ({{calcData.weather}})</span>
+            <span class="text-primary" *ngIf="calcData.weather === 'Optimal'">Optimal Conditions</span>
+            <span class="text-secondary" *ngIf="calcData.weather !== 'Optimal'">Yield Penalty Applied</span>
+          </div>
+          
+          <div class="progress-bar-container mt-4">
+            <div class="flex justify-between text-xs mb-1">
+              <span>Confidence Score</span>
+              <span>85%</span>
+            </div>
+            <div class="progress-bg">
+              <div class="progress-fill" style="width: 85%;"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

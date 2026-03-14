@@ -1,0 +1,45 @@
+<div class="app-container">
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar glass-card">
+    <div class="sidebar-header">
+      <div class="logo-circle"></div>
+      <h2>AgriSense</h2>
+    </div>
+    
+    <div class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <span class="icon">📊</span>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/advisor" routerLinkActive="active" class="nav-item">
+        <span class="icon">🌱</span>
+        <span>Planting Advisor</span>
+      </a>
+      <a routerLink="/prediction" routerLinkActive="active" class="nav-item">
+        <span class="icon">📈</span>
+        <span>Yield Prediction</span>
+      </a>
+      <a routerLink="/profile" routerLinkActive="active" class="nav-item profile-link">
+        <span class="icon">🧑‍🌾</span>
+        <span>Farmer Profile</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <header class="top-header glass-card">
+      <div class="header-title">
+        <h3 class="mb-1 text-primary">AI-Powered Agricultural Assistant</h3>
+        <p class="mb-0">Optimize your yield with data-driven insights</p>
+      </div>
+      <div class="user-info">
+        <div class="avatar">👨‍🌾</div>
+      </div>
+    </header>
+    
+    <div class="content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

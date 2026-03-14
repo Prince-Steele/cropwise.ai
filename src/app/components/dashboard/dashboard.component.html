@@ -1,0 +1,87 @@
+<div class="dashboard-container animate-fade-in">
+  <div class="header-section mb-4">
+    <h2 class="mb-1">Overview</h2>
+    <p>Welcome back! Here's your farm's status today.</p>
+  </div>
+
+  <div class="grid grid-cols-3 gap-6 mb-6">
+    <!-- Weather Widget -->
+    <div class="glass-card weather-widget">
+      <div class="flex justify-between items-center mb-3">
+        <h4 class="mb-0">Current Weather</h4>
+        <span class="icon weather-icon">☀️</span>
+      </div>
+      <div class="weather-data">
+        <h2 class="temperature text-secondary">28°C</h2>
+        <p class="condition">Sunny, 15% Humidity</p>
+        <p class="location-text">📍 St. Ann, Jamaica</p>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="glass-card stat-card">
+      <div class="flex-col pb-2">
+        <span class="stat-label">Total Land Evaluated</span>
+        <span class="stat-value text-primary">12 Acres</span>
+      </div>
+      <div class="flex-col pt-3 border-top">
+        <span class="stat-label">Current Season</span>
+        <span class="stat-value">Spring</span>
+      </div>
+    </div>
+
+    <!-- AI Advisor Teaser -->
+    <div class="glass-card advisor-teaser flex-col justify-between">
+      <div>
+        <h4 class="mb-2">AI Planting Advisor</h4>
+        <p>Ready to plan your next crop cycle? Get AI-driven recommendations tailored to your land.</p>
+      </div>
+      <button class="btn-primary mt-2" routerLink="/advisor">Get Recommendations ✨</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-6">
+    <!-- Recent Recommendations -->
+    <div class="glass-card">
+      <h4 class="mb-4">Recent Recommendations</h4>
+      <div class="recommendation-list">
+        <div class="recommendation-item">
+          <div class="flex items-center gap-4">
+            <div class="crop-icon">🍅</div>
+            <div>
+              <h5 class="mb-1">Tomatoes</h5>
+              <p class="mb-0 text-xs">High Yield Potential • Low Risk</p>
+            </div>
+          </div>
+          <span class="badge badge-success">Recommended</span>
+        </div>
+        <div class="recommendation-item">
+          <div class="flex items-center gap-4">
+            <div class="crop-icon">🌿</div>
+            <div>
+              <h5 class="mb-1">Callaloo</h5>
+              <p class="mb-0 text-xs">Moderate Yield • Very Low Risk</p>
+            </div>
+          </div>
+          <span class="badge badge-success">Recommended</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Start Yield Prediction -->
+    <div class="glass-card">
+      <h4 class="mb-4">Quick Yield Estimate</h4>
+      <p class="mb-3">Quickly calculate potential yield for a crop.</p>
+      <div class="flex gap-2">
+        <select class="form-control">
+          <option>Select Crop...</option>
+          <option>Tomato</option>
+          <option>Callaloo</option>
+          <option>Pepper</option>
+        </select>
+        <input type="number" class="form-control" placeholder="Acres" style="width: 100px;">
+        <button class="btn-primary" routerLink="/prediction">Calculate</button>
+      </div>
+    </div>
+  </div>
+</div>
