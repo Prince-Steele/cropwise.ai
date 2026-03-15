@@ -14,12 +14,15 @@ export class PlantingAdvisorComponent implements OnInit {
     location: '',
     landSize: null,
     season: 'Spring',
-    history: ''
+    history: '',
+    soilType: '',
+    soilEvidenceName: ''
   };
 
   isAnalyzing = false;
   hasResults = false;
   recommendations: AdvisorResponse | null = null;
+  soilSampleFile: File | null = null;
 
   constructor(private advisorService: AdvisorService) { }
 
@@ -49,6 +52,20 @@ export class PlantingAdvisorComponent implements OnInit {
           this.recommendations = null;
         }
       });
+  }
+
+  onSoilFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files && input.files.length ? input.files[0] : null;
+
+    this.soilSampleFile = file;
+    this.formData.soilEvidenceName = file ? file.name : '';
+  }
+
+  clearSoilFile(input: HTMLInputElement): void {
+    this.soilSampleFile = null;
+    this.formData.soilEvidenceName = '';
+    input.value = '';
   }
 
   getCropIcon(crop: string): string {

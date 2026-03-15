@@ -2,39 +2,41 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LayoutComponent } from './components/layout/layout.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { PlantingAdvisorComponent } from './components/planting-advisor/planting-advisor.component';
-import { YieldPredictionComponent } from './components/yield-prediction/yield-prediction.component';
-import { FarmerProfileComponent } from './components/farmer-profile/farmer-profile.component';
+import { ContactUsComponent } from './components/contact-us/contact-us.component';
+import { HelpCentreComponent } from './components/help-centre/help-centre.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { LoginComponent } from './components/login/login.component';
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { TermsOfUseComponent } from './components/terms-of-use/terms-of-use.component';
+import { SharedModule } from './shared/shared.module';
+
+// NOTE: LayoutComponent, DashboardComponent, PlantingAdvisorComponent,
+// YieldPredictionComponent, FarmerProfileComponent are now declared in the
+// lazy-loaded AppFeatureModule (app-feature/app-feature.module.ts).
 
 @NgModule({
   declarations: [
     AppComponent,
-    LayoutComponent,
-    DashboardComponent,
-    PlantingAdvisorComponent,
-    YieldPredictionComponent,
-    FarmerProfileComponent,
+    ContactUsComponent,
+    HelpCentreComponent,
     LandingPageComponent,
     LoginComponent,
-    SignupComponent
+    PrivacyPolicyComponent,
+    SignupComponent,
+    TermsOfUseComponent,
   ],
   imports: [
     BrowserModule,
-    CommonModule,
     HttpClientModule,
+    FormsModule,
     AppRoutingModule,
-    FormsModule
+    SharedModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

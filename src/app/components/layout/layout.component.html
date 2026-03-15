@@ -1,59 +1,81 @@
-<!-- Top Navigation Bar -->
-<nav class="top-navbar">
-  <div class="navbar-inner">
-    <div class="navbar-brand">
-      <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
-        <i class="fa-solid fa-bars"></i>
+<!-- ── Top Header (slim) ── -->
+<header class="app-header" role="banner">
+  <div class="header-inner">
+    <!-- Brand (visible on all sizes) -->
+    <div class="header-brand">
+      <button class="sidebar-toggle-btn" (click)="toggleMobileMenu()" aria-label="Toggle sidebar" aria-expanded="false">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
       </button>
-      <div class="logo-icon">
-        <i class="fa-solid fa-leaf"></i>
-      </div>
-      <span class="brand-text">AgriSense</span>
+      <img src="assets/image/cropwise-logo.png" alt="Cropwise" class="nav-logo-img" loading="eager" width="36" height="36">
+      <span class="brand-text">Cropwise</span>
     </div>
 
-    <div class="navbar-links" [class.mobile-open]="isMobileMenuOpen">
-      <div class="mobile-header">
-        <div class="flex items-center gap-2">
-          <div class="logo-icon"><i class="fa-solid fa-leaf"></i></div>
-          <span class="brand-text">AgriSense</span>
-        </div>
-        <button class="mobile-close-btn" (click)="toggleMobileMenu()">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <a routerLink="/app/dashboard" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
-        <i class="fa-solid fa-chart-column"></i>
-        <span>Dashboard</span>
+    <!-- Right actions: only logout + avatar -->
+    <div class="header-actions">
+      <button class="notification-btn" aria-label="View notifications">
+        <i class="fa-regular fa-bell" aria-hidden="true"></i>
+      </button>
+      <a class="user-avatar" routerLink="/app/profile" role="button" aria-label="View your profile" tabindex="0">
+        <i class="fa-solid fa-user" aria-hidden="true"></i>
       </a>
-      <a routerLink="/app/advisor" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
-        <i class="fa-solid fa-seedling"></i>
-        <span>Planting Advisor</span>
-      </a>
-      <a routerLink="/app/prediction" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
-        <i class="fa-solid fa-chart-line"></i>
-        <span>Yield Prediction</span>
-      </a>
-      <a routerLink="/app/profile" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
-        <i class="fa-solid fa-user"></i>
-        <span>Profile</span>
-      </a>
-    </div>
-
-    <!-- Mobile overlay -->
-    <div class="mobile-overlay" *ngIf="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
-
-    <div class="navbar-actions">
-      <div class="navbar-greeting">
-        <span class="greeting-text">AI-Powered Agricultural Assistant</span>
-      </div>
-      <div class="user-avatar" routerLink="/app/profile">
-        <i class="fa-solid fa-user"></i>
-      </div>
     </div>
   </div>
-</nav>
+</header>
 
-<!-- Main Content Area -->
-<main class="main-content">
-  <router-outlet></router-outlet>
-</main>
+<!-- ── App Shell ── -->
+<div class="app-shell">
+
+  <!-- ── Left Sidebar ── -->
+  <aside class="sidebar" [class.sidebar-open]="isMobileMenuOpen" aria-label="Main navigation">
+
+    <!-- Sidebar brand (desktop) -->
+    <div class="sidebar-brand">
+      <img src="assets/image/cropwise-logo.png" alt="Cropwise" class="nav-logo-img" width="36" height="36">
+      <span class="brand-text">Cropwise</span>
+    </div>
+
+    <!-- Nav links -->
+    <nav class="sidebar-nav" aria-label="App navigation">
+      <a routerLink="/app/dashboard" routerLinkActive="active" (click)="closeMobileMenu()" class="sidebar-link">
+        <span class="sidebar-icon"><i class="fa-solid fa-chart-column" aria-hidden="true"></i></span>
+        <span class="sidebar-label">Dashboard</span>
+      </a>
+      <a routerLink="/app/advisor" routerLinkActive="active" (click)="closeMobileMenu()" class="sidebar-link">
+        <span class="sidebar-icon"><i class="fa-solid fa-seedling" aria-hidden="true"></i></span>
+        <span class="sidebar-label">Planting Advisor</span>
+      </a>
+      <a routerLink="/app/prediction" routerLinkActive="active" (click)="closeMobileMenu()" class="sidebar-link">
+        <span class="sidebar-icon"><i class="fa-solid fa-chart-line" aria-hidden="true"></i></span>
+        <span class="sidebar-label">Yield Prediction</span>
+      </a>
+      <a routerLink="/app/profile" routerLinkActive="active" (click)="closeMobileMenu()" class="sidebar-link">
+        <span class="sidebar-icon"><i class="fa-solid fa-user" aria-hidden="true"></i></span>
+        <span class="sidebar-label">Profile</span>
+      </a>
+    </nav>
+
+    <!-- Logout (sidebar bottom) -->
+    <a routerLink="/login" (click)="closeMobileMenu()" class="sidebar-link sidebar-logout" aria-label="Log out of Cropwise">
+      <span class="sidebar-icon"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i></span>
+      <span class="sidebar-label">Logout</span>
+    </a>
+
+    <!-- Sidebar footer hint -->
+    <div class="sidebar-footer-hint">
+      <i class="fa-solid fa-leaf" aria-hidden="true"></i>
+      <span>AI-Powered Crop Advisor</span>
+    </div>
+  </aside>
+
+  <!-- Overlay for mobile -->
+  <div class="sidebar-overlay" *ngIf="isMobileMenuOpen" (click)="closeMobileMenu()" aria-hidden="true"></div>
+
+  <!-- ── Page Content ── -->
+  <main class="page-content" id="main-content" role="main">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>
+
+<!-- Shared Footer -->
+<app-footer></app-footer>

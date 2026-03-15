@@ -1,5 +1,4 @@
-/* ── Dashboard Layout ── */
-.dashboard-container {
+﻿.dashboard-container {
   padding: 0;
 }
 
@@ -7,14 +6,12 @@
   color: var(--text-heading);
 }
 
-/* ── Stats Grid (Top Row) ── */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
 
-/* ── Weather Widget ── */
 .weather-widget {
   border-left: 4px solid var(--color-secondary);
   background: linear-gradient(135deg, var(--color-surface) 60%, var(--color-secondary-light));
@@ -33,11 +30,11 @@
 .weather-icon {
   font-size: 2rem;
   color: var(--color-secondary);
-  filter: drop-shadow(0 2px 6px rgba(230, 126, 34, 0.25));
+  filter: drop-shadow(0 2px 6px rgba(230, 126, 34, 0.2));
 }
 
 .temperature {
-  font-size: 2.5rem;
+  font-size: 2.4rem;
   font-weight: 800;
   color: var(--text-heading);
   margin-bottom: 0.15rem;
@@ -60,7 +57,55 @@
   color: var(--color-secondary);
 }
 
-/* ── Stat Card ── */
+.weather-data {
+  min-height: 126px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.section-state {
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 1rem;
+  text-align: center;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+}
+
+.compact-state {
+  min-height: 126px;
+}
+
+.recommendation-state,
+.profile-state {
+  min-height: 260px;
+}
+
+.error-state {
+  border-color: rgba(231, 76, 60, 0.28);
+  background: linear-gradient(180deg, var(--color-surface-alt), #fff);
+}
+
+.state-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--color-primary-light);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.state-icon {
+  font-size: 1.4rem;
+  color: var(--color-primary);
+}
+
 .stat-card {
   display: flex;
   flex-direction: column;
@@ -87,7 +132,13 @@
   color: var(--text-heading);
 }
 
-/* ── AI Advisor Teaser ── */
+.stat-meta {
+  display: inline-flex;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
 .advisor-teaser {
   display: flex;
   flex-direction: column;
@@ -107,18 +158,21 @@
   opacity: 0.8;
 }
 
-/* ── Bottom Grid (2 cols) ── */
 .bottom-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
 }
 
-/* ── Recommendation List ── */
 .recommendation-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+}
+
+.recommendation-workspace {
+  display: grid;
+  gap: 1rem;
 }
 
 .recommendation-item {
@@ -144,6 +198,196 @@
   border-color: var(--color-border-light);
 }
 
+.recommendation-button {
+  width: 100%;
+  border-width: 1px;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: none;
+}
+
+.recommendation-button.is-selected {
+  background: linear-gradient(135deg, var(--color-primary-light), var(--color-surface));
+  border-color: rgba(27, 122, 74, 0.25);
+  box-shadow: 0 10px 22px rgba(27, 122, 74, 0.08);
+}
+
+.recommendation-button.is-selected .crop-icon {
+  background: #d9efe2;
+}
+
+.recommendation-copy {
+  min-width: 0;
+}
+
+.recommendation-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+  flex-shrink: 0;
+}
+
+.recommendation-panel {
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(27, 122, 74, 0.15);
+  background: linear-gradient(180deg, #fcfefd, var(--color-surface-alt));
+  padding: 1rem 1.1rem;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.panel-kicker {
+  margin-bottom: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.panel-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.panel-preview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.preview-stat {
+  min-width: 0;
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-light);
+  background: rgba(255, 255, 255, 0.75);
+  text-align: center;
+}
+
+.preview-stat strong {
+  display: block;
+  font-size: 1rem;
+  color: var(--text-heading);
+}
+
+.preview-stat span {
+  display: block;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.panel-toggle-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.panel-toggle {
+  min-width: 130px;
+}
+
+.panel-expandable {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: max-height 0.3s ease, opacity 0.25s ease, transform 0.25s ease, margin-top 0.25s ease;
+}
+
+.panel-expandable.is-open {
+  max-height: 1200px;
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 1rem;
+}
+
+.panel-expandable-inner {
+  padding-top: 0.15rem;
+}
+
+.panel-section + .panel-section {
+  margin-top: 1rem;
+}
+
+.panel-section h6 {
+  margin-bottom: 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  min-width: 0;
+  gap: 0.7rem;
+  padding: 0.75rem 0.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-light);
+  background: rgba(255, 255, 255, 0.75);
+  font-size: 0.88rem;
+  color: var(--text-main);
+}
+
+.detail-item span:last-child {
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.detail-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  flex-shrink: 0;
+  font-size: 0.72rem;
+}
+
+.reason-icon {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.warning-icon {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+.action-icon {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
 .crop-icon {
   font-size: 1.5rem;
   color: var(--color-primary);
@@ -157,7 +401,6 @@
   flex-shrink: 0;
 }
 
-/* ── Quick Yield Form ── */
 .quick-yield-form {
   display: flex;
   gap: 0.5rem;
@@ -169,13 +412,177 @@
   flex-shrink: 0;
 }
 
-/* ── Responsive ── */
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.forecast-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.forecast-item {
+  display: grid;
+  grid-template-columns: 0.7fr 0.7fr 0.8fr auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.65rem 0.75rem;
+  background: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
+}
+
+.forecast-day {
+  font-weight: 600;
+  color: var(--text-heading);
+}
+
+.forecast-temp {
+  font-weight: 700;
+  color: var(--text-heading);
+}
+
+.forecast-rain {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.risk-pill {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.risk-low {
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  border-color: rgba(27, 122, 74, 0.3);
+}
+
+.risk-medium {
+  color: var(--color-secondary);
+  background: var(--color-secondary-light);
+  border-color: rgba(230, 126, 34, 0.3);
+}
+
+.risk-high {
+  color: var(--color-danger);
+  background: var(--color-danger-light);
+  border-color: rgba(231, 76, 60, 0.3);
+}
+
+.alert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.alert-item {
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
+  background: var(--color-surface-alt);
+}
+
+.alert-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.alert-detail {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.alert-low {
+  border-color: rgba(27, 122, 74, 0.3);
+}
+
+.alert-medium {
+  border-color: rgba(230, 126, 34, 0.35);
+}
+
+.alert-high {
+  border-color: rgba(231, 76, 60, 0.35);
+}
+
+.profile-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-header-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.profile-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-main);
+}
+
+.profile-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.history-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.history-mini {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.crop-icon-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+@media (min-width: 1280px) {
+  .recommendation-workspace {
+    grid-template-columns: minmax(220px, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+}
+
 @media (max-width: 1024px) {
   .stats-grid {
     grid-template-columns: 1fr 1fr;
   }
   .advisor-teaser {
     grid-column: span 2;
+  }
+  .insights-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -189,10 +596,27 @@
   .bottom-grid {
     grid-template-columns: 1fr;
   }
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
   .quick-yield-form {
     flex-direction: column;
   }
   .acres-input {
     width: 100%;
+  }
+  .recommendation-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .recommendation-meta {
+    margin-left: 0;
+    margin-top: 0.75rem;
+  }
+  .panel-header {
+    flex-direction: column;
+  }
+  .panel-preview {
+    grid-template-columns: 1fr;
   }
 }

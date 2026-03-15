@@ -1,0 +1,141 @@
+<div class="info-page-shell">
+  <div class="info-page-backdrop"></div>
+
+  <header class="info-page-nav glass-card">
+    <a routerLink="/" class="info-brand">
+      <img src="assets/image/cropwise-logo.png" alt="Cropwise" class="nav-logo-img" width="40" height="40">
+      <span>Cropwise</span>
+    </a>
+    <div class="info-nav-actions">
+      <a routerLink="/" class="btn-outline btn-sm">Home</a>
+      <a routerLink="/contact-us" class="btn-outline btn-sm">Contact</a>
+      <a routerLink="/signup" class="btn-primary btn-sm">Get Started</a>
+    </div>
+  </header>
+
+  <main class="info-page-main">
+    <section class="info-hero">
+      <div class="info-hero-copy">
+        <span class="info-kicker">Support</span>
+        <h1>Help Centre</h1>
+        <p>
+          Find quick answers for account setup, crop recommendations, yield forecasts, and platform navigation.
+          This page is designed to get farmers and advisors back on track fast.
+        </p>
+      </div>
+      <div class="info-hero-side glass-card">
+        <div class="info-mini-title">Support snapshot</div>
+        <div class="info-stat-grid">
+          <div class="info-stat-card">
+            <strong>&lt; 1 day</strong>
+            <span>Typical reply</span>
+          </div>
+          <div class="info-stat-card">
+            <strong>4 areas</strong>
+            <span>Core topics</span>
+          </div>
+          <div class="info-stat-card">
+            <strong>24/7</strong>
+            <span>Self-serve access</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-section-header">
+        <span class="info-eyebrow">Start here</span>
+        <h2>Popular support topics</h2>
+      </div>
+      <div class="info-card-grid">
+        <article class="glass-card info-topic-card">
+          <div class="info-topic-icon"><i class="fa-solid fa-user-plus"></i></div>
+          <h3>Account setup</h3>
+          <p>Create your profile, add farm details, and prepare your workspace before running any predictions.</p>
+          <a routerLink="/signup" class="info-inline-link">Create an account</a>
+        </article>
+        <article class="glass-card info-topic-card">
+          <div class="info-topic-icon"><i class="fa-solid fa-seedling"></i></div>
+          <h3>Planting advice</h3>
+          <p>Review soil type, land size, season, and crop history when the advisor output looks unclear.</p>
+          <a routerLink="/app/advisor" class="info-inline-link">Open advisor</a>
+        </article>
+        <article class="glass-card info-topic-card">
+          <div class="info-topic-icon"><i class="fa-solid fa-chart-line"></i></div>
+          <h3>Yield forecasts</h3>
+          <p>Double-check acreage, crop selection, and forecast assumptions to keep your estimate realistic.</p>
+          <a routerLink="/app/prediction" class="info-inline-link">Open prediction</a>
+        </article>
+        <article class="glass-card info-topic-card">
+          <div class="info-topic-icon"><i class="fa-solid fa-cloud-sun-rain"></i></div>
+          <h3>Weather and alerts</h3>
+          <p>If live weather is unavailable, refresh the dashboard and confirm the location data in your profile.</p>
+          <a routerLink="/app/dashboard" class="info-inline-link">Open dashboard</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="info-columns">
+      <div class="glass-card info-column-card">
+        <div class="info-section-header">
+          <span class="info-eyebrow">FAQ</span>
+          <h2>Frequently asked questions</h2>
+        </div>
+        <div class="info-faq-list">
+          <article class="info-faq-item">
+            <h3>Why did my crop recommendation change?</h3>
+            <p>Recommendations respond to the season, farm profile data, recent crop history, and live weather context.</p>
+          </article>
+          <article class="info-faq-item">
+            <h3>What should I do if a page stays in loading state?</h3>
+            <p>Retry the page first. If the issue continues, note the page name and time, then contact support.</p>
+          </article>
+          <article class="info-faq-item">
+            <h3>Can I trust the forecast as a guarantee?</h3>
+            <p>No. Forecasts are planning aids only and should always be reviewed against field conditions and market realities.</p>
+          </article>
+          <article class="info-faq-item">
+            <h3>How often should I update my farmer profile?</h3>
+            <p>Update it when land size changes, you complete a harvest, switch crops, or move to a new operating area.</p>
+          </article>
+          <article class="info-faq-item">
+            <h3>What helps support resolve my issue faster?</h3>
+            <p>Send your account email, the page you were on, what action you took, and a screenshot if available.</p>
+          </article>
+          <article class="info-faq-item">
+            <h3>Where can I ask for a product improvement?</h3>
+            <p>Use the Contact Us page and mark the request as product feedback so it routes to the right team.</p>
+          </article>
+        </div>
+      </div>
+
+      <aside class="info-side-stack">
+        <div class="glass-card info-column-card">
+          <div class="info-section-header">
+            <span class="info-eyebrow">Checklist</span>
+            <h2>Before contacting support</h2>
+          </div>
+          <ol class="info-step-list">
+            <li>Refresh the page and retry the action once.</li>
+            <li>Confirm your farm details and selected crop are correct.</li>
+            <li>Capture the page name, timestamp, and a screenshot of the issue.</li>
+          </ol>
+        </div>
+
+        <div class="glass-card info-column-card info-accent-card">
+          <div class="info-section-header">
+            <span class="info-eyebrow">Still blocked?</span>
+            <h2>Get direct help</h2>
+          </div>
+          <p>Our support team can help with account access, confusing outputs, and platform issues.</p>
+          <div class="info-inline-actions">
+            <a routerLink="/contact-us" class="btn-primary">Contact support</a>
+            <a routerLink="/privacy-policy" class="btn-outline">Privacy policy</a>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<app-footer></app-footer>

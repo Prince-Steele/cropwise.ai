@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -6,19 +7,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-  signupData = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: ''
-  };
 
-  constructor() { }
+  showPassword = false;
+  showConfirmPassword = false;
 
-  ngOnInit(): void {
-  }
+  constructor(private router: Router) { }
 
-  onSignup() {
-    console.log('Signup data:', this.signupData);
+  ngOnInit(): void { }
+
+  onSignup(firstName: string, lastName: string, email: string, password: string) {
+    console.log('Signup data:', { firstName, lastName, email, password });
+    if (email && password) {
+      this.router.navigate(['/app/dashboard']);
+    }
   }
 }

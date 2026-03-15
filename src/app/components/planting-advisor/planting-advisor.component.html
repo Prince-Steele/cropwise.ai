@@ -37,6 +37,52 @@
           <small class="form-hint">Separate multiple crops with commas</small>
         </div>
 
+        <div class="soil-section">
+          <div class="soil-section-header">
+            <h4 class="mb-1"><i class="fa-solid fa-mound section-icon"></i> Soil Profile</h4>
+            <p class="mb-0">Add the soil type directly or upload a soil image/report for later analysis.</p>
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label">Known Soil Type</label>
+            <select class="form-control" name="soilType" [(ngModel)]="formData.soilType">
+              <option value="">Select soil type...</option>
+              <option value="Loam">Loam</option>
+              <option value="Sandy">Sandy</option>
+              <option value="Clay">Clay</option>
+              <option value="Silt">Silt</option>
+              <option value="Peaty">Peaty</option>
+              <option value="Chalky">Chalky</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="soilEvidence">Soil Image or File</label>
+            <input
+              #soilEvidenceInput
+              id="soilEvidence"
+              type="file"
+              class="file-input"
+              accept="image/*,.pdf,.csv,.txt,.doc,.docx"
+              (change)="onSoilFileSelected($event)"
+            >
+
+            <label for="soilEvidence" class="upload-card">
+              <span class="upload-icon"><i class="fa-solid fa-file-arrow-up"></i></span>
+              <span class="upload-title">{{ formData.soilEvidenceName || 'Upload soil sample image or report' }}</span>
+              <span class="upload-copy">Accepted formats: JPG, PNG, PDF, CSV, TXT, DOC</span>
+            </label>
+
+            <div *ngIf="formData.soilEvidenceName" class="upload-meta">
+              <span class="text-sm text-muted">
+                <i class="fa-solid fa-file-circle-check"></i>
+                {{ formData.soilEvidenceName }}
+              </span>
+              <button type="button" class="btn-outline btn-sm" (click)="clearSoilFile(soilEvidenceInput)">Remove</button>
+            </div>
+          </div>
+        </div>
+
         <button type="submit" class="btn-primary w-full" [disabled]="isAnalyzing">
           <span *ngIf="!isAnalyzing"><i class="fa-solid fa-wand-magic-sparkles"></i> Run AI Analysis</span>
           <span *ngIf="isAnalyzing" class="animate-pulse">Analyzing Data...</span>

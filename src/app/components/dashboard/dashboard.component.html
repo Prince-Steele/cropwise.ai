@@ -5,27 +5,38 @@
   </div>
 
   <div class="stats-grid mb-6">
-    <!-- Weather Widget -->
     <div class="glass-card weather-widget">
       <div class="card-header mb-3">
         <h4 class="mb-0">Current Weather</h4>
         <span class="weather-icon"><i class="fa-solid fa-sun"></i></span>
       </div>
-      <div class="weather-data">
-        <h2 class="temperature">{{(weather?.temperature ?? '--')}}&deg;C</h2>
-        <p class="condition mb-1">{{weather?.condition || 'Loading'}}{{weather ? ', ' : ''}}{{(weather?.humidity ?? '--')}}% Humidity</p>
+      <div *ngIf="isWeatherLoading" class="section-state compact-state">
+        <div class="state-spinner mb-2"></div>
+        <p class="mb-0 text-sm">Fetching live weather...</p>
+      </div>
+      <div *ngIf="!isWeatherLoading && weather && !weatherError" class="weather-data">
+        <h2 class="temperature">{{weather.temperature}}&deg;C</h2>
+        <p class="condition mb-1">{{weather.condition}}, {{weather.humidity}}% Humidity</p>
         <p class="location-text mb-0">
           <i class="fa-solid fa-location-dot"></i>
-          {{weather?.location || 'St. Ann, Jamaica'}}
+          {{weather.location}}
         </p>
+      </div>
+      <div *ngIf="!isWeatherLoading && weatherError" class="section-state compact-state error-state">
+        <div class="state-icon text-danger"><i class="fa-solid fa-cloud-bolt"></i></div>
+        <h5 class="mb-1">Weather unavailable</h5>
+        <p class="mb-2 text-sm">{{weatherError}}</p>
+        <button type="button" class="btn-outline btn-sm" (click)="retryWeather()">Retry</button>
       </div>
     </div>
 
-    <!-- Quick Stats -->
     <div class="glass-card stat-card">
       <div class="stat-block pb-2">
         <span class="stat-label">Total Land Evaluated</span>
         <span class="stat-value text-primary">{{totalAcres || '--'}} Acres</span>
+        <span *ngIf="isProfileLoading" class="stat-meta">Syncing farmer profile...</span>
+        <span *ngIf="!isProfileLoading && profileError" class="stat-meta text-danger">Profile data unavailable</span>
+        <span *ngIf="!isProfileLoading && !profileError" class="stat-meta">Synced from farmer profile</span>
       </div>
       <div class="stat-block pt-3 border-top">
         <span class="stat-label">Current Season</span>
@@ -33,7 +44,6 @@
       </div>
     </div>
 
-    <!-- AI Advisor Teaser -->
     <div class="glass-card advisor-teaser">
       <div>
         <h4 class="mb-2"><i class="fa-solid fa-robot teaser-icon"></i> AI Planting Advisor</h4>
@@ -47,33 +57,125 @@
   </div>
 
   <div class="bottom-grid">
-    <!-- Recent Recommendations -->
-    <div class="glass-card">
+    <div class="glass-card recommendation-card">
       <h4 class="mb-4"><i class="fa-solid fa-clipboard-list section-icon"></i> Recent Recommendations</h4>
-      <div class="recommendation-list">
-        <div *ngFor="let item of recommendations" class="recommendation-item">
-          <div class="flex items-center gap-4">
-            <div class="crop-icon"><i class="fa-solid" [ngClass]="getCropIcon(item.crop)"></i></div>
+      <div *ngIf="isRecommendationsLoading" class="section-state recommendation-state">
+        <div class="state-spinner mb-2"></div>
+        <h5 class="mb-1">Loading recommendations</h5>
+        <p class="mb-0 text-sm">Pulling the latest crop suggestions from the advisor service.</p>
+      </div>
+      <div *ngIf="!isRecommendationsLoading && recommendationsError" class="section-state recommendation-state error-state">
+        <div class="state-icon text-danger"><i class="fa-solid fa-circle-exclamation"></i></div>
+        <h5 class="mb-1">Recommendations unavailable</h5>
+        <p class="mb-2 text-sm">{{recommendationsError}}</p>
+        <button type="button" class="btn-outline btn-sm" (click)="retryRecommendations()">Retry</button>
+      </div>
+      <div *ngIf="!isRecommendationsLoading && !recommendationsError && recommendations.length > 0" class="recommendation-workspace">
+        <div class="recommendation-list">
+          <button
+            *ngFor="let item of recommendations"
+            type="button"
+            class="recommendation-item recommendation-button"
+            [class.is-selected]="isSelectedRecommendation(item)"
+            (click)="selectRecommendation(item)"
+          >
+            <div class="flex items-center gap-4">
+              <div class="crop-icon"><i class="fa-solid" [ngClass]="getCropIcon(item.crop)"></i></div>
+              <div class="recommendation-copy">
+                <h5 class="mb-1">{{item.crop}}</h5>
+                <p class="mb-0 text-xs text-muted">{{item.note || item.risk}}</p>
+              </div>
+            </div>
+            <div class="recommendation-meta">
+              <span class="badge" [ngClass]="item.recommended ? 'badge-success' : 'badge-outline'">
+                {{item.recommended ? 'Recommended' : 'Suggested'}}
+              </span>
+            </div>
+          </button>
+        </div>
+
+        <div *ngIf="recommendationExplanation as detail" class="recommendation-panel animate-fade-in">
+          <div class="panel-header">
             <div>
-              <h5 class="mb-1">{{item.crop}}</h5>
-              <p class="mb-0 text-xs text-muted">{{item.note || item.risk}}</p>
+              <div class="panel-kicker">Recommendation Explanation</div>
+              <h5 class="mb-1">{{detail.title}}</h5>
+              <p class="mb-0 text-sm text-muted">{{detail.summary}}</p>
+            </div>
+            <div class="panel-badges">
+              <span class="badge" [ngClass]="selectedRecommendation?.recommended ? 'badge-success' : 'badge-outline'">
+                {{selectedRecommendation?.recommended ? 'Top Fit' : 'Compare'}}
+              </span>
+              <span class="badge" [ngClass]="getRecommendationRiskClass(selectedRecommendation?.risk || '')">
+                {{selectedRecommendation?.risk || 'Risk Pending'}}
+              </span>
             </div>
           </div>
-          <span class="badge badge-success">{{item.recommended ? 'Recommended' : 'Suggested'}}</span>
-        </div>
-        <div *ngIf="recommendations.length === 0" class="recommendation-item empty-item">
-          <div class="flex items-center gap-4">
-            <div class="crop-icon"><i class="fa-solid fa-seedling"></i></div>
-            <div>
-              <h5 class="mb-1">No Recommendations Yet</h5>
-              <p class="mb-0 text-xs text-muted">Run the advisor to generate crop suggestions.</p>
+
+          <div class="panel-preview">
+            <div class="preview-stat">
+              <strong>{{detail.reasons.length}}</strong>
+              <span>fit reasons</span>
+            </div>
+            <div class="preview-stat">
+              <strong>{{detail.watchouts.length}}</strong>
+              <span>watchouts</span>
+            </div>
+            <div class="preview-stat">
+              <strong>{{detail.nextSteps.length}}</strong>
+              <span>next steps</span>
+            </div>
+          </div>
+
+          <div class="panel-toggle-row">
+            <button type="button" class="btn-outline btn-sm panel-toggle" (click)="toggleRecommendationExpanded()">
+              <span>{{isRecommendationExpanded ? 'Show less' : 'Show more'}}</span>
+              <i class="fa-solid" [ngClass]="isRecommendationExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+            </button>
+          </div>
+
+          <div class="panel-expandable" [class.is-open]="isRecommendationExpanded">
+            <div class="panel-expandable-inner">
+              <div class="panel-section">
+                <h6>Why it fits</h6>
+                <div class="detail-list">
+                  <div *ngFor="let reason of detail.reasons" class="detail-item">
+                    <span class="detail-icon reason-icon"><i class="fa-solid fa-check"></i></span>
+                    <span>{{reason}}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel-section">
+                <h6>Watchouts</h6>
+                <div class="detail-list">
+                  <div *ngFor="let watchout of detail.watchouts" class="detail-item">
+                    <span class="detail-icon warning-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                    <span>{{watchout}}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel-section">
+                <h6>Next steps</h6>
+                <div class="detail-list">
+                  <div *ngFor="let step of detail.nextSteps" class="detail-item">
+                    <span class="detail-icon action-icon"><i class="fa-solid fa-arrow-right"></i></span>
+                    <span>{{step}}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <div *ngIf="!isRecommendationsLoading && !recommendationsError && recommendations.length === 0" class="section-state recommendation-state">
+        <div class="state-icon"><i class="fa-solid fa-seedling"></i></div>
+        <h5 class="mb-1">No recommendations yet</h5>
+        <p class="mb-2 text-sm">Run the advisor to generate crop suggestions and explanation details.</p>
+        <a class="btn-outline btn-sm" routerLink="/app/advisor">Open Advisor</a>
+      </div>
     </div>
 
-    <!-- Quick Start Yield Prediction -->
     <div class="glass-card">
       <h4 class="mb-4"><i class="fa-solid fa-chart-line section-icon"></i> Quick Yield Estimate</h4>
       <p class="mb-3">Quickly calculate potential yield for a crop.</p>
@@ -86,6 +188,80 @@
         </select>
         <input type="number" class="form-control acres-input" placeholder="Acres">
         <button class="btn-primary" routerLink="/app/prediction">Calculate</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="insights-grid mt-4">
+    <div class="glass-card">
+      <h4 class="mb-4"><i class="fa-solid fa-cloud-sun section-icon"></i> Weather Outlook</h4>
+      <div class="forecast-list">
+        <div *ngFor="let day of forecast" class="forecast-item">
+          <div class="forecast-day">{{day.label}}</div>
+          <div class="forecast-temp">{{day.temp}}&deg;C</div>
+          <div class="forecast-rain">{{day.rain}} Rain</div>
+          <span class="risk-pill" [ngClass]="{ 'risk-low': day.risk === 'Low', 'risk-medium': day.risk === 'Medium', 'risk-high': day.risk === 'High' }">
+            {{day.risk}} Risk
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-card">
+      <h4 class="mb-4"><i class="fa-solid fa-triangle-exclamation section-icon"></i> Alerts & Insights</h4>
+      <div class="alert-list">
+        <div *ngFor="let alert of alerts" class="alert-item" [ngClass]="getAlertClass(alert.level)">
+          <div class="alert-title">{{alert.title}}</div>
+          <div class="alert-detail">{{alert.detail}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-card">
+      <h4 class="mb-4"><i class="fa-solid fa-user section-icon"></i> Farmer Snapshot</h4>
+      <div *ngIf="isProfileLoading" class="section-state profile-state">
+        <div class="state-spinner mb-2"></div>
+        <h5 class="mb-1">Loading profile</h5>
+        <p class="mb-0 text-sm">Fetching farm metrics and recent crop history.</p>
+      </div>
+      <div *ngIf="!isProfileLoading && profileError" class="section-state profile-state error-state">
+        <div class="state-icon text-danger"><i class="fa-solid fa-user-slash"></i></div>
+        <h5 class="mb-1">Profile unavailable</h5>
+        <p class="mb-2 text-sm">{{profileError}}</p>
+        <button type="button" class="btn-outline btn-sm" (click)="retryProfile()">Retry</button>
+      </div>
+      <div *ngIf="!isProfileLoading && !profileError && profile as currentProfile" class="profile-preview">
+        <div class="profile-header-row">
+          <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
+          <div>
+            <h5 class="mb-1">{{currentProfile.name}}</h5>
+            <p class="text-xs text-muted mb-0">{{currentProfile.location}}</p>
+          </div>
+        </div>
+        <div class="profile-metrics">
+          <div>
+            <span class="stat-label">Lifetime Yield</span>
+            <div class="stat-value text-secondary">{{currentProfile.lifetimeYield | number}} kg</div>
+          </div>
+          <div>
+            <span class="stat-label">Harvests</span>
+            <div class="stat-value">{{currentProfile.successfulHarvests}}</div>
+          </div>
+        </div>
+        <div class="history-preview">
+          <div *ngFor="let item of historyPreview" class="history-mini">
+            <div class="crop-icon-sm"><i class="fa-solid" [ngClass]="getCropIcon(item.crop)"></i></div>
+            <div>
+              <div class="text-sm">{{item.crop}} &bull; {{item.season}}</div>
+              <div class="text-xs text-muted">{{item.acres}} Acres</div>
+            </div>
+          </div>
+        </div>
+        <a class="btn-outline btn-sm mt-3" routerLink="/app/profile">View Full Profile</a>
+      </div>
+      <div *ngIf="!isProfileLoading && !profileError && !profile" class="empty-profile">
+        <p class="text-sm text-muted mb-2">No farmer profile loaded yet.</p>
+        <a class="btn-outline btn-sm" routerLink="/app/profile">Open Profile</a>
       </div>
     </div>
   </div>

@@ -11,6 +11,8 @@ export interface AdvisorRequest {
   landSize: number | null;
   season: string;
   history: string;
+  soilType?: string;
+  soilEvidenceName?: string;
 }
 
 export interface AdvisorResponse {

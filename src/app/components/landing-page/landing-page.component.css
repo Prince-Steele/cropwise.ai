@@ -72,25 +72,45 @@
   letter-spacing: -0.5px;
 }
 
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .btn-outline {
-  padding: 0.5rem 1.25rem;
+  padding: 0.5rem 1.4rem;
   border-radius: 100px;
   color: var(--text-main);
-  border: 1px solid var(--color-border);
+  border: 1.5px solid var(--color-border);
   background: transparent;
   font-weight: 500;
+  font-size: 0.9rem;
   text-decoration: none;
-  transition: all var(--transition-smooth);
+  transition: all 0.2s ease;
 }
 
 .btn-outline:hover {
-  background: rgba(255,255,255,0.05);
-  border-color: rgba(255,255,255,0.2);
+  background: rgba(27, 122, 74, 0.08);
+  border-color: #1B7A4A;
+  color: #1B7A4A;
 }
 
 .landing-nav .btn-primary {
-  padding: 0.5rem 1.25rem;
-  font-size: 0.95rem;
+  padding: 0.5rem 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 100px;
+  background: #1B7A4A;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(27,122,74,0.3);
+}
+
+.landing-nav .btn-primary:hover {
+  background: #155c38;
+  box-shadow: 0 4px 14px rgba(27,122,74,0.4);
 }
 
 /* 2. Hero Section */
@@ -411,4 +431,12 @@
   .impact-quote {
     font-size: 1.25rem;
   }
+}
+
+.nav-logo-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
 }

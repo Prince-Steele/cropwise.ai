@@ -1,108 +1,152 @@
-<!-- Signup Form View -->
-<div class="auth-wrapper">
-  <!-- Minimalist background -->
-  <div class="auth-bg"></div>
-
-  <div class="container auth-container flex justify-center items-center min-h-screen py-8">
-    <div class="auth-card glass-card flex w-full max-w-4xl p-0 overflow-hidden animate-up">
-      
-      <!-- Left side: Branding & Benefits (Hidden on mobile) -->
-      <div class="auth-sidebar bg-surface-light p-8 flex flex-col justify-between w-1/2">
-        <div>
-          <div class="logo-container mb-6">
-            <div class="logo-circle">
-              <div class="logo-inner"></div>
-            </div>
-            <h2 class="text-xl font-bold text-main mt-3">AgriSense</h2>
-          </div>
-          
-          <h3 class="text-2xl font-bold text-white mb-4">Join the future of farming.</h3>
-          <p class="text-muted mb-8 text-sm">Create your free account today and start making data-driven decisions that grow your margins.</p>
-          
-          <div class="benefit-list flex flex-col gap-4">
-            <div class="benefit-item flex items-center gap-3">
-              <div class="icon-wrapper w-10 h-10 rounded-full bg-primary-light text-primary flex items-center justify-center shrink-0">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              </div>
-              <div>
-                <strong class="text-white text-sm block">Live Predictions</strong>
-                <span class="text-muted text-xs">Access real-time yield forecasts.</span>
-              </div>
-            </div>
-            <div class="benefit-item flex items-center gap-3">
-              <div class="icon-wrapper w-10 h-10 rounded-full bg-primary-light text-primary flex items-center justify-center shrink-0">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              </div>
-              <div>
-                <strong class="text-white text-sm block">Market Demand</strong>
-                <span class="text-muted text-xs">Track current commodity pricing.</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="mt-8">
-          <a routerLink="/" class="text-muted text-sm hover-text-white flex items-center gap-2">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-            Back to Home
-          </a>
-        </div>
+<div class="auth-page">
+  <div class="auth-left">
+    <div class="auth-left-inner">
+      <div class="brand">
+        <img src="assets/image/cropwise-logo.png" alt="Cropwise" class="brand-logo-img" width="52" height="52">
+        <span class="brand-name">Cropwise</span>
       </div>
 
-      <!-- Right side: Form -->
-      <div class="auth-form-wrapper p-8 w-1/2 flex flex-col justify-center">
-        <div class="mb-6">
-          <h2 class="text-2xl font-bold text-white mb-2">Create Account</h2>
-          <p class="text-muted text-sm">Tell us a bit about yourself to get started.</p>
-        </div>
+      <div class="auth-left-content">
+        <h2>Start farming smarter today.</h2>
+        <p>Create your free account and get AI-driven recommendations, yield predictions, and weather insights tailored to your farm.</p>
 
-        <form class="auth-form animate-up-delay-1 flex flex-col gap-4" (ngSubmit)="onSignup()" #signupForm="ngForm">
-          
-          <div class="mb-1">
-            <label class="form-label text-sm text-muted block mb-2" for="fullName">Full Name</label>
-            <input type="text" id="fullName" name="fullName" [(ngModel)]="signupData.firstName" required placeholder="John Doe" class="form-control w-full">
-          </div>
-
-          <div class="mb-1">
-            <label class="form-label text-sm text-muted block mb-2" for="email">Email Address</label>
-            <input type="email" id="email" name="email" [(ngModel)]="signupData.email" required placeholder="name@example.com" class="form-control w-full">
-          </div>
-
-          <div class="grid grid-cols-2 gap-4 mb-1">
+        <ul class="feature-list">
+          <li>
+            <div class="feature-icon"><i class="fa-solid fa-seedling"></i></div>
             <div>
-              <label class="form-label text-sm text-muted block mb-2" for="location">Location</label>
-              <input type="text" id="location" name="location" required placeholder="e.g. St. Elizabeth" class="form-control w-full">
+              <strong>Personalised Recommendations</strong>
+              <span>Crops chosen for your land and climate</span>
             </div>
+          </li>
+          <li>
+            <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
             <div>
-              <label class="form-label text-sm text-muted block mb-2" for="farmSize">Farm Size (Acres)</label>
-              <input type="number" id="farmSize" name="farmSize" required placeholder="15" class="form-control w-full">
+              <strong>Yield Calculator</strong>
+              <span>Estimate output before you plant</span>
             </div>
-          </div>
-
-          <div class="mb-1">
-            <label class="form-label text-sm text-muted block mb-2" for="password">Password</label>
-            <input type="password" id="password" name="password" [(ngModel)]="signupData.password" required minlength="8" placeholder="Create a password (min 8 chars)" class="form-control w-full" #passwordModel="ngModel">
-            <div *ngIf="passwordModel.invalid && (passwordModel.dirty || passwordModel.touched)" class="text-danger text-xs mt-1">
-              <small *ngIf="passwordModel.errors?.['minlength']">Password must be at least 8 characters.</small>
+          </li>
+          <li>
+            <div class="feature-icon"><i class="fa-solid fa-user-check"></i></div>
+            <div>
+              <strong>Farmer Profile</strong>
+              <span>Track your history and improve over time</span>
             </div>
-          </div>
-          
-          <div class="mb-4">
-            <label class="form-label text-sm text-muted block mb-2" for="confirmPassword">Confirm Password</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password" class="form-control w-full">
-          </div>
-
-          <button type="submit" class="btn btn-primary w-full py-3 justify-center mt-2" [disabled]="signupForm.invalid">Create Account</button>
-        </form>
-
-        <div class="mt-6 text-center animate-up-delay-2">
-          <p class="text-sm text-muted">
-            Already have an account? 
-            <a routerLink="/login" class="text-primary font-semibold hover-text-white transition-smooth ml-1">Log In</a>
-          </p>
-        </div>
+          </li>
+        </ul>
       </div>
-      
+
+      <a routerLink="/" class="back-link">
+        <i class="fa-solid fa-arrow-left"></i>
+        Back to Home
+      </a>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-form-box glass-card">
+      <div class="form-header">
+        <h1>Create Account</h1>
+        <p>Fill in your details to get started for free.</p>
+      </div>
+
+      <form (ngSubmit)="onSignup(firstNameInput.value, lastNameInput.value, emailInput.value, passwordInput.value)">
+        <div class="field-row">
+          <div class="field-group">
+            <label for="firstName">First Name</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-user input-icon"></i>
+              <input
+                #firstNameInput
+                type="text"
+                id="firstName"
+                name="firstName"
+                required
+                placeholder="First name"
+                class="form-control with-icon"
+              >
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="lastName">Last Name</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-user input-icon"></i>
+              <input
+                #lastNameInput
+                type="text"
+                id="lastName"
+                name="lastName"
+                required
+                placeholder="Last name"
+                class="form-control with-icon"
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="email">Email Address</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input
+              #emailInput
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="you@example.com"
+              class="form-control with-icon"
+            >
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input
+              #passwordInput
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              name="password"
+              required
+              minlength="8"
+              placeholder="At least 8 characters"
+              class="form-control with-icon with-toggle"
+            >
+            <button type="button" class="toggle-pw-btn" (click)="showPassword = !showPassword" tabindex="-1">
+              <i class="fa-solid" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              id="confirmPassword"
+              name="confirmPassword"
+              required
+              placeholder="Re-enter your password"
+              class="form-control with-icon with-toggle"
+            >
+            <button type="button" class="toggle-pw-btn" (click)="showConfirmPassword = !showConfirmPassword" tabindex="-1">
+              <i class="fa-solid" [class.fa-eye]="!showConfirmPassword" [class.fa-eye-slash]="showConfirmPassword"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          <i class="fa-solid fa-user-plus"></i>
+          Create Account
+        </button>
+      </form>
+
+      <p class="switch-link">
+        Already have an account?
+        <a routerLink="/login">Log in</a>
+      </p>
     </div>
   </div>
 </div>
