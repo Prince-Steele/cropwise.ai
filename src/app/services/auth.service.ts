@@ -35,10 +35,14 @@ export class AuthService {
     return !!this.currentUserSubject.value;
   }
 
-  async login(email: string): Promise<User> {
-    const user = this.supabaseService.setMockUser(email);
+  async login(email: string, displayName?: string): Promise<User> {
+    const user = this.supabaseService.setMockUser(email, displayName);
     this.currentUserSubject.next(user);
     return user;
+  }
+
+  getCurrentUserValue(): User | null {
+    return this.currentUserSubject.value;
   }
 
   async logout(): Promise<void> {

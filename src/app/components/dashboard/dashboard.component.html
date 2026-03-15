@@ -240,7 +240,10 @@
           </div>
           <div>
             <h5 class="mb-1">{{currentProfile.name}}</h5>
-            <p class="text-xs text-muted mb-0">{{currentProfile.location}}</p>
+            <p *ngIf="currentProfile.location; else missingProfileLocation" class="text-xs text-muted mb-0">{{currentProfile.location}}</p>
+            <ng-template #missingProfileLocation>
+              <p class="text-xs text-muted mb-0">Location not added yet</p>
+            </ng-template>
           </div>
         </div>
         <div class="profile-metrics">

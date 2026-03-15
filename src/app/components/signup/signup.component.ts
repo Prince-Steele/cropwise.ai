@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -11,14 +12,18 @@ export class SignupComponent implements OnInit {
   showPassword = false;
   showConfirmPassword = false;
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void { }
 
-  onSignup(firstName: string, lastName: string, email: string, password: string) {
-    console.log('Signup data:', { firstName, lastName, email, password });
+  async onSignup(firstName: string, lastName: string, email: string, password: string) {
     if (email && password) {
-      this.router.navigate(['/app/dashboard']);
+      const displayName = `${firstName} ${lastName}`.trim();
+      await this.authService.login(email, displayName);
+      await this.router.navigate(['/app/dashboard']);
     }
   }
 }

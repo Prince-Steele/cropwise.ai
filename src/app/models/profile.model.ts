@@ -13,7 +13,7 @@ export interface CropHistory {
 export interface FarmerProfile {
   name: string;
   location: string;
-  activeSince: number;
+  activeSince: number | null;
   profileImage?: string;
   totalAcres: number;
   certifications: string[];

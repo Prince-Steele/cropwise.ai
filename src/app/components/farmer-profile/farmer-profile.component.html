@@ -11,8 +11,15 @@
         <div class="profile-title-row">
           <div>
             <h2 class="mb-1">{{profile.name}}</h2>
-            <p class="mb-2 profile-location">
-              <i class="fa-solid fa-location-dot"></i> {{profile.location}} &bull; Active since {{profile.activeSince}}
+            <p *ngIf="profile.location || profile.activeSince" class="mb-2 profile-location">
+              <ng-container *ngIf="profile.location">
+                <i class="fa-solid fa-location-dot"></i> {{profile.location}}
+              </ng-container>
+              <ng-container *ngIf="profile.location && profile.activeSince">&bull;</ng-container>
+              <ng-container *ngIf="profile.activeSince">Active since {{profile.activeSince}}</ng-container>
+            </p>
+            <p *ngIf="!profile.location && !profile.activeSince" class="mb-2 profile-location">
+              Add your location and farm details to complete this profile.
             </p>
           </div>
           <button type="button" class="btn-outline btn-sm" (click)="startEditing()" *ngIf="!isEditing">

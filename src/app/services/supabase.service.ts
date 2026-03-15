@@ -65,13 +65,22 @@ export class SupabaseService {
     return session?.access_token || null;
   }
 
-  setMockUser(email: string): User {
+  setMockUser(email: string, displayName?: string): User {
     const normalizedEmail = email.trim().toLowerCase();
+    const existingUser = this.getStoredMockUser();
+    const fullName = displayName?.trim()
+      || (existingUser?.email === normalizedEmail ? this.resolveStoredName(existingUser) : '')
+      || this.deriveDisplayName(normalizedEmail);
     const mockUser = {
       id: `mock-${normalizedEmail.replace(/[^a-z0-9]/g, '-')}`,
       email: normalizedEmail,
       aud: 'authenticated',
-      role: 'authenticated'
+      role: 'authenticated',
+      app_metadata: {},
+      created_at: new Date().toISOString(),
+      user_metadata: {
+        full_name: fullName
+      }
     } as User;
 
     localStorage.setItem(MOCK_USER_STORAGE_KEY, JSON.stringify(mockUser));
@@ -85,24 +94,48 @@ export class SupabaseService {
   }
 
   private getMockSession(): { user: User | null; access_token?: string } | null {
+    const user = this.getStoredMockUser();
+    if (!user) {
+      return null;
+    }
+
+    return {
+      user,
+      access_token: 'mock-access-token'
+    };
+  }
+
+  private clearMockUser(): void {
+    localStorage.removeItem(MOCK_USER_STORAGE_KEY);
+  }
+
+  private getStoredMockUser(): User | null {
     const stored = localStorage.getItem(MOCK_USER_STORAGE_KEY);
     if (!stored) {
       return null;
     }
 
     try {
-      const user = JSON.parse(stored) as User;
-      return {
-        user,
-        access_token: 'mock-access-token'
-      };
+      return JSON.parse(stored) as User;
     } catch {
       return null;
     }
   }
 
-  private clearMockUser(): void {
-    localStorage.removeItem(MOCK_USER_STORAGE_KEY);
+  private resolveStoredName(user: User): string {
+    const metadata = user.user_metadata as { full_name?: string; name?: string } | undefined;
+    return metadata?.full_name || metadata?.name || '';
+  }
+
+  private deriveDisplayName(email: string): string {
+    const localPart = email.split('@')[0] || 'Farmer';
+    return localPart
+      .replace(/[._-]+/g, ' ')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ') || 'Farmer';
   }
 
   private hasValidSupabaseConfig(): boolean {

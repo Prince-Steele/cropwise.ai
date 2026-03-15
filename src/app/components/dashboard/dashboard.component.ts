@@ -149,7 +149,7 @@ export class DashboardComponent implements OnInit {
         this.totalAcres = profile.totalAcres;
         this.historyPreview = profile.history.slice(0, 3);
         this.isProfileLoading = false;
-        this.loadWeather(profile.location);
+        this.loadWeather(profile.location || 'Jamaica');
       },
       error: () => {
         this.profile = null;

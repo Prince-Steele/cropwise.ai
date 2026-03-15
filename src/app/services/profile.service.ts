@@ -1,56 +1,24 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { User } from '@supabase/supabase-js';
 import { FarmerProfile } from '../models/profile.model';
+import { AuthService } from './auth.service';
 
-const PROFILE_STORAGE_KEY = 'cropwise_farmer_profile';
-
-const DEFAULT_PROFILE: FarmerProfile = {
-  name: 'Alicia Brown',
-  location: 'St. Elizabeth, Jamaica',
-  activeSince: 2021,
-  profileImage: '',
-  totalAcres: 12,
-  certifications: ['GAP Certified', 'Organic Practices'],
-  lifetimeYield: 18450,
-  successfulHarvests: 14,
-  primaryCrops: 4,
-  history: [
-    {
-      crop: 'Callaloo',
-      season: 'Spring 2025',
-      acres: 3,
-      yield: 2400,
-      status: 'Strong demand at market',
-      type: 'success',
-      harvested: 'June 2025'
-    },
-    {
-      crop: 'Sweet Pepper',
-      season: 'Winter 2024',
-      acres: 2,
-      yield: 1650,
-      status: 'Monitor fungal pressure',
-      type: 'warning',
-      harvested: 'February 2025'
-    },
-    {
-      crop: 'Yam',
-      season: 'Summer 2024',
-      acres: 4,
-      yield: 5200,
-      status: 'Excellent harvest quality',
-      type: 'success',
-      harvested: 'November 2024'
-    }
-  ]
-};
+const PROFILE_STORAGE_KEY_PREFIX = 'cropwise_farmer_profile:';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
-  private profileSubject = new BehaviorSubject<FarmerProfile>(this.readProfile());
+  private profileSubject = new BehaviorSubject<FarmerProfile>(this.createEmptyProfile());
+
+  constructor(private authService: AuthService) {
+    this.syncProfile(this.authService.getCurrentUserValue());
+    this.authService.getCurrentUser().subscribe((user) => {
+      this.syncProfile(user);
+    });
+  }
 
   getFarmerProfile(): Observable<FarmerProfile> {
     return of(this.profileSubject.value).pipe(delay(200));
@@ -61,28 +29,100 @@ export class ProfileService {
   }
 
   saveFarmerProfile(profile: FarmerProfile): Observable<FarmerProfile> {
-    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
-    this.profileSubject.next(profile);
-    return of(profile).pipe(delay(150));
+    const currentUser = this.authService.getCurrentUserValue();
+    const normalizedProfile = this.normalizeProfile(profile, currentUser);
+    const storageKey = this.getProfileStorageKey(currentUser);
+
+    if (storageKey) {
+      localStorage.setItem(storageKey, JSON.stringify(normalizedProfile));
+    }
+
+    this.profileSubject.next(normalizedProfile);
+    return of(normalizedProfile).pipe(delay(150));
   }
 
-  private readProfile(): FarmerProfile {
-    const stored = localStorage.getItem(PROFILE_STORAGE_KEY);
+  private syncProfile(user: User | null): void {
+    this.profileSubject.next(this.readProfile(user));
+  }
+
+  private readProfile(user: User | null): FarmerProfile {
+    const starterProfile = this.createEmptyProfile(user);
+    const storageKey = this.getProfileStorageKey(user);
+
+    if (!storageKey) {
+      return starterProfile;
+    }
+
+    const stored = localStorage.getItem(storageKey);
     if (!stored) {
-      return DEFAULT_PROFILE;
+      return starterProfile;
     }
 
     try {
       const parsed = JSON.parse(stored) as FarmerProfile;
-      return {
-        ...DEFAULT_PROFILE,
-        ...parsed,
-        profileImage: parsed.profileImage || DEFAULT_PROFILE.profileImage,
-        certifications: parsed.certifications?.length ? parsed.certifications : DEFAULT_PROFILE.certifications,
-        history: parsed.history?.length ? parsed.history : DEFAULT_PROFILE.history
-      };
+      return this.normalizeProfile(parsed, user);
     } catch {
-      return DEFAULT_PROFILE;
+      return starterProfile;
     }
+  }
+
+  private normalizeProfile(profile: FarmerProfile, user: User | null): FarmerProfile {
+    const starterProfile = this.createEmptyProfile(user);
+
+    return {
+      ...starterProfile,
+      ...profile,
+      name: profile.name?.trim() || starterProfile.name,
+      location: profile.location?.trim() || '',
+      activeSince: profile.activeSince || null,
+      profileImage: profile.profileImage || '',
+      certifications: profile.certifications?.filter(Boolean) || [],
+      history: profile.history || []
+    };
+  }
+
+  private createEmptyProfile(user?: User | null): FarmerProfile {
+    return {
+      name: this.resolveDisplayName(user),
+      location: '',
+      activeSince: null,
+      profileImage: '',
+      totalAcres: 0,
+      certifications: [],
+      lifetimeYield: 0,
+      successfulHarvests: 0,
+      primaryCrops: 0,
+      history: []
+    };
+  }
+
+  private getProfileStorageKey(user: User | null): string | null {
+    const profileId = user?.id || user?.email;
+    if (!profileId) {
+      return null;
+    }
+
+    return `${PROFILE_STORAGE_KEY_PREFIX}${profileId}`;
+  }
+
+  private resolveDisplayName(user?: User | null): string {
+    const metadata = user?.user_metadata as { full_name?: string; name?: string } | undefined;
+    const fullName = metadata?.full_name || metadata?.name;
+    if (fullName?.trim()) {
+      return fullName.trim();
+    }
+
+    const emailLocalPart = user?.email?.split('@')[0];
+    if (emailLocalPart) {
+      return emailLocalPart
+        .replace(/[._-]+/g, ' ')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ');
+    }
+
+    return 'Farmer';
   }
 }
