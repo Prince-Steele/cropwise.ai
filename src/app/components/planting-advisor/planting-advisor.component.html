@@ -87,6 +87,7 @@
           <span *ngIf="!isAnalyzing"><i class="fa-solid fa-wand-magic-sparkles"></i> Run AI Analysis</span>
           <span *ngIf="isAnalyzing" class="animate-pulse">Analyzing Data...</span>
         </button>
+        <p *ngIf="errorMessage" class="text-danger text-sm mb-0">{{ errorMessage }}</p>
       </form>
     </div>
 

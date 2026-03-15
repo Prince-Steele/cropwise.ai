@@ -3,3 +3,5 @@ node_modules/
 logs.txt
 gemini_err.txt
 gemini_test_log.txt
+runtime.out.log
+runtime.err.log

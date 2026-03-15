@@ -14,6 +14,7 @@ export interface FarmerProfile {
   name: string;
   location: string;
   activeSince: number;
+  profileImage?: string;
   totalAcres: number;
   certifications: string[];
   lifetimeYield: number;

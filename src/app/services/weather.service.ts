@@ -1,18 +1,43 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { WeatherSnapshot } from '../models/weather.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WeatherService {
-
-  constructor(private http: HttpClient) { }
-
   getCurrentWeather(location: string): Observable<WeatherSnapshot> {
-    const params = location ? new HttpParams().set('location', location) : undefined;
-    return this.http.get<WeatherSnapshot>(`${environment.apiUrl}/weather`, { params });
+    const weather = this.buildMockWeather(location || 'Jamaica');
+    return of(weather).pipe(delay(250));
+  }
+
+  private buildMockWeather(location: string): WeatherSnapshot {
+    const normalized = location.toLowerCase();
+
+    if (normalized.includes('st. elizabeth')) {
+      return {
+        temperature: 30,
+        condition: 'Sunny intervals',
+        humidity: 68,
+        location
+      };
+    }
+
+    if (normalized.includes('manchester')) {
+      return {
+        temperature: 27,
+        condition: 'Light showers',
+        humidity: 76,
+        location
+      };
+    }
+
+    return {
+      temperature: 29,
+      condition: 'Partly cloudy',
+      humidity: 72,
+      location
+    };
   }
 }

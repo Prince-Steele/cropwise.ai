@@ -5,19 +5,23 @@
   </div>
 
   <div class="prediction-grid">
-    <!-- Calculator Form -->
     <div class="glass-card form-area">
       <h3 class="mb-4"><i class="fa-solid fa-sliders section-icon"></i> Prediction Parameters</h3>
 
       <form (ngSubmit)="calculateYield()" #predictionForm="ngForm" class="flex-col gap-4">
         <div class="form-group">
           <label class="form-label">Crop Type</label>
-          <select class="form-control" name="crop" [(ngModel)]="calcData.crop">
-            <option value="Tomato">Tomato</option>
-            <option value="Callaloo">Callaloo</option>
-            <option value="Pepper">Sweet Pepper</option>
-            <option value="Yam">Yellow Yam</option>
-          </select>
+          <input
+            type="text"
+            class="form-control"
+            name="crop"
+            [(ngModel)]="calcData.crop"
+            list="crop-options"
+            placeholder="Type or choose a crop"
+          >
+          <datalist id="crop-options">
+            <option *ngFor="let crop of availableCrops" [value]="crop"></option>
+          </datalist>
         </div>
 
         <div class="form-row">
@@ -38,37 +42,40 @@
 
         <div class="form-group mb-4">
           <label class="form-label">Expected Weather Pattern</label>
-          <select class="form-control" name="weather" [(ngModel)]="calcData.weather">
-            <option value="Optimal">Optimal (Avg. Temp, Good Rain)</option>
-            <option value="Dry">Dry (High Temp, Low Rain)</option>
-            <option value="Wet">Wet (High Rainfall)</option>
-          </select>
+          <input
+            type="text"
+            class="form-control"
+            name="weather"
+            [(ngModel)]="calcData.weather"
+            list="weather-options"
+            placeholder="Type or choose a weather pattern"
+          >
+          <datalist id="weather-options">
+            <option *ngFor="let option of weatherPatterns" [value]="option"></option>
+          </datalist>
         </div>
 
         <button type="submit" class="btn-primary w-full" [disabled]="isCalculating">
           <span *ngIf="!isCalculating"><i class="fa-solid fa-calculator"></i> Calculate Forecast</span>
           <span *ngIf="isCalculating" class="animate-pulse">Crunching Numbers...</span>
         </button>
+        <p *ngIf="errorMessage" class="text-danger text-sm mb-0">{{ errorMessage }}</p>
       </form>
     </div>
 
-    <!-- Prediction Results -->
     <div class="results-area">
-      <!-- Empty State -->
       <div *ngIf="!hasPrediction && !isCalculating" class="empty-state glass-card">
         <div class="empty-icon mb-3"><i class="fa-solid fa-calculator"></i></div>
         <h4 class="mb-2">Ready to Calculate</h4>
         <p class="mb-0">Enter your crop and land parameters to generate a yield forecast.</p>
       </div>
 
-      <!-- Loading State -->
       <div *ngIf="isCalculating" class="loading-state glass-card">
         <div class="spinner spinner-amber mb-3"></div>
         <h4 class="mb-2 text-secondary">Simulating Growth Cycles</h4>
         <p class="mb-0">Applying historical algorithms and weather models to your parameters...</p>
       </div>
 
-      <!-- Results State -->
       <div *ngIf="hasPrediction && !isCalculating" class="animate-fade-in">
         <h3 class="mb-4"><i class="fa-solid fa-chart-bar section-icon"></i> Forecast Results: {{calcData.crop}}</h3>
 
@@ -89,10 +96,32 @@
             <div class="stat-value text-secondary">{{growthDuration}} Days</div>
             <div class="stat-subtext">until first harvest</div>
           </div>
+          <div class="glass-card stat-box">
+            <div class="stat-icon-wrap price-bg">
+              <i class="fa-solid fa-tags"></i>
+            </div>
+            <div class="stat-label">Frequent Market Price</div>
+            <div class="stat-value text-primary" *ngIf="suggestedSellingPrice > 0">{{suggestedSellingPrice | currency:marketCurrency:'symbol':'1.0-0'}}</div>
+            <div class="stat-value text-primary" *ngIf="suggestedSellingPrice === 0">N/A</div>
+            <div class="stat-subtext">{{priceDisplayLabel || 'No price reference yet'}}</div>
+          </div>
+          <div class="glass-card stat-box">
+            <div class="stat-icon-wrap revenue-bg">
+              <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+            <div class="stat-label">Projected Gross Sales</div>
+            <div class="stat-value text-secondary" *ngIf="estimatedGrossRevenue > 0">{{estimatedGrossRevenue | currency:marketCurrency:'symbol':'1.0-0'}}</div>
+            <div class="stat-value text-secondary" *ngIf="estimatedGrossRevenue === 0">N/A</div>
+            <div class="stat-subtext">using the frequent market price</div>
+          </div>
         </div>
 
         <div class="glass-card detail-card">
           <h4 class="mb-3"><i class="fa-solid fa-microscope section-icon"></i> Factor Analysis</h4>
+          <div class="factor-row">
+            <span><i class="fa-solid fa-seedling factor-icon"></i> Yield profile</span>
+            <span class="text-primary">{{matchedCropProfile}}</span>
+          </div>
           <div class="factor-row">
             <span><i class="fa-solid fa-mountain factor-icon"></i> Soil Impact ({{calcData.soil}})</span>
             <span class="text-primary" *ngIf="calcData.soil === 'Excellent' || calcData.soil === 'Good'"><i class="fa-solid fa-arrow-up"></i> Positive</span>
@@ -100,17 +129,32 @@
           </div>
           <div class="factor-row">
             <span><i class="fa-solid fa-cloud-sun factor-icon"></i> Weather Impact ({{calcData.weather}})</span>
-            <span class="text-primary" *ngIf="calcData.weather === 'Optimal'">Optimal Conditions</span>
-            <span class="text-secondary" *ngIf="calcData.weather !== 'Optimal'">Yield Penalty Applied</span>
+            <span class="text-primary" *ngIf="calcData.weather.toLowerCase().includes('optimal')">Optimal Conditions</span>
+            <span class="text-secondary" *ngIf="!calcData.weather.toLowerCase().includes('optimal')">Yield Penalty Applied</span>
           </div>
 
           <div class="progress-bar-container mt-4">
             <div class="flex justify-between text-xs mb-1">
               <span>Confidence Score</span>
-              <span class="text-primary" style="font-weight: 600;">85%</span>
+              <span class="text-primary" style="font-weight: 600;">{{confidenceScore}}%</span>
             </div>
             <div class="progress-bg">
-              <div class="progress-fill" style="width: 85%;"></div>
+              <div class="progress-fill" [style.width.%]="confidenceScore"></div>
+            </div>
+          </div>
+
+          <div *ngIf="marketPrices.length" class="market-price-list mt-4">
+            <h5 class="mb-3"><i class="fa-solid fa-store section-icon"></i> Current Market References</h5>
+            <div *ngFor="let item of marketPrices" class="market-price-item">
+              <div>
+                <strong>{{item.commodity}}</strong>
+                <div class="text-xs text-muted">{{item.variety}}</div>
+              </div>
+              <div class="text-right">
+                <div class="text-sm">Low {{item.low | currency:marketCurrency:'symbol':'1.0-0'}}</div>
+                <div class="text-sm">High {{item.high | currency:marketCurrency:'symbol':'1.0-0'}}</div>
+                <div class="text-sm text-primary">Freq {{item.freq | currency:marketCurrency:'symbol':'1.0-0'}}</div>
+              </div>
             </div>
           </div>
         </div>

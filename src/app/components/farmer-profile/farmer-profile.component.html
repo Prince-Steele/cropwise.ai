@@ -1,26 +1,36 @@
 <div class="profile-container animate-fade-in" *ngIf="profile as profile">
-  <!-- Profile Header -->
   <div class="glass-card profile-header mb-6">
-    <div class="flex items-center gap-6">
+    <div class="flex items-center gap-6 profile-header-content">
       <div class="profile-avatar">
-        <i class="fa-solid fa-user"></i>
+        <img *ngIf="profile.profileImage; else profileAvatarIcon" [src]="profile.profileImage" [alt]="profile.name" class="profile-avatar-image">
+        <ng-template #profileAvatarIcon>
+          <i class="fa-solid fa-user"></i>
+        </ng-template>
       </div>
       <div class="profile-info">
-        <h2 class="mb-1">{{profile.name}}</h2>
-        <p class="mb-2 profile-location">
-          <i class="fa-solid fa-location-dot"></i> {{profile.location}} &bull; Active since {{profile.activeSince}}
-        </p>
+        <div class="profile-title-row">
+          <div>
+            <h2 class="mb-1">{{profile.name}}</h2>
+            <p class="mb-2 profile-location">
+              <i class="fa-solid fa-location-dot"></i> {{profile.location}} &bull; Active since {{profile.activeSince}}
+            </p>
+          </div>
+          <button type="button" class="btn-outline btn-sm" (click)="startEditing()" *ngIf="!isEditing">
+            <i class="fa-solid fa-pen"></i>
+            Edit Profile
+          </button>
+        </div>
         <div class="flex gap-2 flex-wrap">
           <span class="badge badge-accent"><i class="fa-solid fa-ruler-combined"></i> {{profile.totalAcres}} Acres Total</span>
           <span *ngFor="let cert of profile.certifications" class="badge badge-outline"><i class="fa-solid fa-certificate"></i> {{cert}}</span>
         </div>
+        <p *ngIf="statusMessage" class="profile-message success-message mb-0 mt-3">{{statusMessage}}</p>
+        <p *ngIf="error" class="profile-message error-message mb-0 mt-3">{{error}}</p>
       </div>
     </div>
   </div>
 
   <div class="profile-grid">
-
-    <!-- Left Column: Stats + Actions -->
     <div class="left-column">
       <div class="glass-card stat-card mb-6">
         <h4 class="mb-4"><i class="fa-solid fa-chart-pie section-icon"></i> Lifetime Yield Summary</h4>
@@ -41,26 +51,92 @@
         </div>
       </div>
 
-      <!-- Quick Actions -->
-      <div class="glass-card">
+      <div class="glass-card" *ngIf="isEditing && editableProfile as draft">
+        <h4 class="mb-4"><i class="fa-solid fa-user-pen section-icon"></i> Edit Profile</h4>
+        <div class="profile-form-grid">
+          <div class="profile-photo-field profile-field profile-field-wide">
+            <span>Profile Photo</span>
+            <div class="profile-photo-editor">
+              <div class="profile-avatar profile-avatar-preview">
+                <img *ngIf="draft.profileImage; else editableAvatarIcon" [src]="draft.profileImage" [alt]="draft.name" class="profile-avatar-image">
+                <ng-template #editableAvatarIcon>
+                  <i class="fa-solid fa-user"></i>
+                </ng-template>
+              </div>
+              <div class="profile-photo-actions">
+                <label class="btn-outline btn-sm profile-upload-btn">
+                  <input type="file" accept="image/*" (change)="onProfileImageSelected($event)">
+                  <i class="fa-solid fa-image"></i>
+                  Upload Image
+                </label>
+                <button type="button" class="btn-outline btn-sm" (click)="removeProfileImage()" *ngIf="draft.profileImage">
+                  <i class="fa-solid fa-trash-can"></i>
+                  Remove
+                </button>
+                <p class="text-xs text-muted mb-0">PNG or JPG up to 2 MB. Saved on this device.</p>
+              </div>
+            </div>
+          </div>
+          <label class="profile-field">
+            <span>Name</span>
+            <input class="form-control" [(ngModel)]="draft.name" name="name">
+          </label>
+          <label class="profile-field">
+            <span>Location</span>
+            <input class="form-control" [(ngModel)]="draft.location" name="location">
+          </label>
+          <label class="profile-field">
+            <span>Active Since</span>
+            <input type="number" class="form-control" [(ngModel)]="draft.activeSince" name="activeSince">
+          </label>
+          <label class="profile-field">
+            <span>Total Acres</span>
+            <input type="number" class="form-control" [(ngModel)]="draft.totalAcres" name="totalAcres">
+          </label>
+          <label class="profile-field">
+            <span>Lifetime Yield (kg)</span>
+            <input type="number" class="form-control" [(ngModel)]="draft.lifetimeYield" name="lifetimeYield">
+          </label>
+          <label class="profile-field">
+            <span>Successful Harvests</span>
+            <input type="number" class="form-control" [(ngModel)]="draft.successfulHarvests" name="successfulHarvests">
+          </label>
+          <label class="profile-field">
+            <span>Primary Crops</span>
+            <input type="number" class="form-control" [(ngModel)]="draft.primaryCrops" name="primaryCrops">
+          </label>
+          <label class="profile-field profile-field-wide">
+            <span>Certifications</span>
+            <input class="form-control" [(ngModel)]="certificationsInput" name="certifications">
+          </label>
+        </div>
+        <div class="profile-form-actions">
+          <button type="button" class="btn-primary" (click)="saveProfile()" [disabled]="isSaving">
+            <i class="fa-solid fa-floppy-disk"></i>
+            {{ isSaving ? 'Saving...' : 'Save Profile' }}
+          </button>
+          <button type="button" class="btn-outline" (click)="cancelEditing()" [disabled]="isSaving">Cancel</button>
+        </div>
+      </div>
+
+      <div class="glass-card" *ngIf="!isEditing">
         <h4 class="mb-4"><i class="fa-solid fa-bolt section-icon"></i> Quick Actions</h4>
         <button class="btn-primary w-full mb-3" routerLink="/app/advisor">
           <i class="fa-solid fa-seedling"></i> Plan Next Cycle
         </button>
-        <button class="btn-outline w-full mb-3">
-          <i class="fa-solid fa-download"></i> Download Yield Report
+        <button class="btn-outline w-full mb-3" routerLink="/app/dashboard">
+          <i class="fa-solid fa-chart-column"></i> Open Dashboard
         </button>
-        <button class="btn-outline w-full text-danger border-danger">
-          <i class="fa-solid fa-bug"></i> Report Disease/Pest
+        <button class="btn-outline w-full" (click)="startEditing()">
+          <i class="fa-solid fa-user-pen"></i> Update Profile
         </button>
       </div>
     </div>
 
-    <!-- Right Column: Planting History -->
     <div class="glass-card history-area">
       <div class="flex justify-between items-center mb-4">
         <h3 class="mb-0"><i class="fa-solid fa-clock-rotate-left section-icon"></i> Planting History</h3>
-        <button class="btn-outline btn-sm"><i class="fa-solid fa-filter"></i> Filter</button>
+        <span class="badge badge-outline">{{profile.history.length}} Entries</span>
       </div>
 
       <div class="history-list">

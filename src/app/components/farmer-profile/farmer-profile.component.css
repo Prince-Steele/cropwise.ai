@@ -27,6 +27,13 @@
   border-radius: 50%;
   border: 3px solid var(--color-primary);
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.profile-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .profile-location {
@@ -37,6 +44,25 @@
 .profile-location i {
   color: var(--color-secondary);
   margin-right: 0.25rem;
+}
+
+.profile-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.profile-message {
+  font-size: 0.9rem;
+}
+
+.success-message {
+  color: var(--color-primary);
+}
+
+.error-message {
+  color: var(--color-danger);
 }
 
 /* ── Profile Grid ── */
@@ -50,6 +76,71 @@
 .left-column {
   display: flex;
   flex-direction: column;
+}
+
+.profile-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.profile-field span {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-heading);
+}
+
+.profile-field-wide {
+  grid-column: 1 / -1;
+}
+
+.profile-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.profile-photo-field {
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border-light);
+}
+
+.profile-photo-editor {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile-avatar-preview {
+  width: 96px;
+  height: 96px;
+}
+
+.profile-photo-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.profile-upload-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-upload-btn input[type='file'] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
 }
 
 /* ── Stat Cards ── */
@@ -156,6 +247,20 @@
 
   .profile-info .flex {
     justify-content: center;
+  }
+
+  .profile-title-row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-photo-editor {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 

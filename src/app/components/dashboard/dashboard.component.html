@@ -232,7 +232,12 @@
       </div>
       <div *ngIf="!isProfileLoading && !profileError && profile as currentProfile" class="profile-preview">
         <div class="profile-header-row">
-          <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
+          <div class="profile-avatar">
+            <img *ngIf="currentProfile.profileImage; else dashboardAvatarIcon" [src]="currentProfile.profileImage" [alt]="currentProfile.name" class="profile-avatar-image">
+            <ng-template #dashboardAvatarIcon>
+              <i class="fa-solid fa-user"></i>
+            </ng-template>
+          </div>
           <div>
             <h5 class="mb-1">{{currentProfile.name}}</h5>
             <p class="text-xs text-muted mb-0">{{currentProfile.location}}</p>

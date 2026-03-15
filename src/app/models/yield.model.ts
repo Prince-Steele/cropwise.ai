@@ -7,7 +7,9 @@ export interface YieldRequest {
 
 export interface YieldResponse {
   crop: string;
+  matchedCropProfile: string;
   predictedYield: number;
   predictedYieldPerAcre: number;
   growthDuration: number;
+  confidenceScore: number;
 }

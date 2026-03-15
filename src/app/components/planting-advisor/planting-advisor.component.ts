@@ -23,6 +23,7 @@ export class PlantingAdvisorComponent implements OnInit {
   hasResults = false;
   recommendations: AdvisorResponse | null = null;
   soilSampleFile: File | null = null;
+  errorMessage = '';
 
   constructor(private advisorService: AdvisorService) { }
 
@@ -31,12 +32,14 @@ export class PlantingAdvisorComponent implements OnInit {
 
   analyze() {
     if (!this.formData.location || !this.formData.landSize) {
+      this.errorMessage = 'Enter both location and land size before running the analysis.';
       return;
     }
     
     this.isAnalyzing = true;
     this.hasResults = false;
     this.recommendations = null;
+    this.errorMessage = '';
 
     this.advisorService.getRecommendations(this.formData)
       .pipe(finalize(() => {
@@ -50,6 +53,7 @@ export class PlantingAdvisorComponent implements OnInit {
         error: () => {
           this.hasResults = false;
           this.recommendations = null;
+          this.errorMessage = 'The advisor could not generate recommendations right now.';
         }
       });
   }

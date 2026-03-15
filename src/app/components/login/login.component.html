@@ -93,6 +93,8 @@
           <i class="fa-solid fa-right-to-bracket"></i>
           Log In
         </button>
+
+        <p *ngIf="errorMessage" class="text-danger mt-3 mb-0">{{ errorMessage }}</p>
       </form>
 
       <p class="switch-link">
