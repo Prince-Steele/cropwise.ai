@@ -6,7 +6,9 @@ import { SharedModule } from '../shared/shared.module';
 
 import { LayoutComponent } from '../components/layout/layout.component';
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
+import { MarketPricesComponent } from '../components/market/market-prices.component';
 import { PlantingAdvisorComponent } from '../components/planting-advisor/planting-advisor.component';
+import { RecommendationFormComponent } from '../components/recommendation/recommendation-form.component';
 import { YieldPredictionComponent } from '../components/yield-prediction/yield-prediction.component';
 import { FarmerProfileComponent } from '../components/farmer-profile/farmer-profile.component';
 
@@ -28,7 +30,9 @@ const routes: Routes = [
   declarations: [
     LayoutComponent,
     DashboardComponent,
+    MarketPricesComponent,
     PlantingAdvisorComponent,
+    RecommendationFormComponent,
     YieldPredictionComponent,
     FarmerProfileComponent,
   ],

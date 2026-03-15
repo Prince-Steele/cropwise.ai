@@ -1,0 +1,5 @@
+node_modules/
+.env
+logs.txt
+gemini_err.txt
+gemini_test_log.txt
