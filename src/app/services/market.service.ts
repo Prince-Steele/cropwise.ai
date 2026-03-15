@@ -11,13 +11,13 @@ export class MarketService {
 
   constructor(private http: HttpClient) {}
 
-  getLatestPrices(symbols: string[] = ['WHEAT', 'CORN', 'COFFEE', 'SUGAR']): Observable<any> {
-    const symbolStr = symbols.join(',');
-    return this.http.get(`${this.apiUrl}/latest?symbols=${symbolStr}`);
+  getLatestPrices(search = ''): Observable<any> {
+    const query = search ? `?search=${encodeURIComponent(search)}` : '';
+    return this.http.get(`${this.apiUrl}/latest${query}`);
   }
 
-  getHistoricalPrices(date: string, symbols: string[]): Observable<any> {
-    const symbolStr = symbols.join(',');
-    return this.http.get(`${this.apiUrl}/historical?date=${date}&symbols=${symbolStr}`);
+  getHistoricalPrices(date: string, search = ''): Observable<any> {
+    const query = search ? `&search=${encodeURIComponent(search)}` : '';
+    return this.http.get(`${this.apiUrl}/historical?date=${date}${query}`);
   }
 }

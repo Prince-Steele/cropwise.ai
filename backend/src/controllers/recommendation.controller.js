@@ -1,6 +1,6 @@
 const { success, error } = require('../utils/apiResponse');
 const supabaseService = require('../services/supabase.service');
-const geminiService = require('../services/gemini.service');
+const cropRecommendationService = require('../services/cropRecommendation.service');
 
 const predictRecommendation = async (req, res, next) => {
   try {
@@ -12,12 +12,11 @@ const predictRecommendation = async (req, res, next) => {
       return error(res, 'All soil and weather parameters are required', 400);
     }
 
-    // Call Gemini Service for the recommendation
-    const recommendation = await geminiService.generateCropRecommendation({
+    const recommendation = cropRecommendationService.predict({
       nitrogen, phosphorus, potassium, temperature, humidity, ph, rainfall
     });
 
-    return success(res, recommendation, 'Crop recommendation generated successfully via AI');
+    return success(res, recommendation, 'Crop recommendation generated successfully from dataset');
 
   } catch (err) {
     next(err);

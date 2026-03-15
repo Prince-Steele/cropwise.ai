@@ -3,12 +3,8 @@ const commoditiesService = require('../services/commodities.service');
 
 const getLatestPrices = async (req, res, next) => {
   try {
-    const { symbols, base } = req.query;
-    if (!symbols) {
-      return error(res, 'Symbols query parameter is required (e.g. ?symbols=WHEAT,CORN)', 400);
-    }
-
-    const data = await commoditiesService.getLatestPrices(symbols, base);
+    const search = req.query.search || req.query.symbols || '';
+    const data = await commoditiesService.getLatestPrices(search);
     return success(res, data.data, 'Latest market prices fetched successfully');
   } catch (err) {
     next(err);
@@ -17,12 +13,14 @@ const getLatestPrices = async (req, res, next) => {
 
 const getHistoricalPrices = async (req, res, next) => {
   try {
-    const { date, symbols, base } = req.query;
-    if (!date || !symbols) {
-      return error(res, 'Date and symbols query parameters are required', 400);
+    const { date } = req.query;
+    const search = req.query.search || req.query.symbols || '';
+
+    if (!date) {
+      return error(res, 'Date query parameter is required', 400);
     }
 
-    const data = await commoditiesService.getHistoricalPrices(date, symbols, base);
+    const data = await commoditiesService.getHistoricalPrices(date, search);
     return success(res, data.data, `Historical prices for ${date} fetched successfully`);
   } catch (err) {
     next(err);

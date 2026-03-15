@@ -1,97 +1,98 @@
-const axios = require('axios');
-const env = require('../config/env');
+const marketPrices = require('../data/marketPrices');
 
 class CommoditiesService {
   constructor() {
-    this.baseUrl = env.commoditiesApi.baseUrl;
-    this.apiKey = env.commoditiesApi.apiKey;
+    this.currency = 'JMD';
+    this.priceEntries = marketPrices.map((entry) => ({
+      ...entry,
+      suggested: entry.freq || Math.round((entry.low + entry.high) / 2),
+    }));
   }
 
-  /**
-   * Fetch the latest market prices for given symbols
-   * @param {string} symbols - Comma separated symbols (e.g., 'WHEAT,CORN,RICE')
-   * @param {string} base - Base currency (default: 'USD')
-   */
-  async getLatestPrices(symbols, base = 'USD') {
-    if (!this.apiKey || this.apiKey === 'your_commodities_api_key_here') {
-      console.warn('⚠️ Commodities API Key missing. Returning MOCK data.');
-      return this._getMockLatestPrices(symbols);
-    }
-
-    try {
-      const response = await axios.get(`${this.baseUrl}/latest`, {
-        params: {
-          access_key: this.apiKey,
-          base,
-          symbols
-        }
-      });
-
-      if (!response.data || !response.data.data) {
-        throw new Error('Invalid response from Commodities API');
-      }
-
-      return response.data;
-    } catch (error) {
-      console.error('Commodities API Error:', error.response?.data || error.message);
-      throw new Error('Failed to fetch latest market prices');
-    }
+  async getLatestPrices(search = '') {
+    return this._buildPriceResponse(this.findMatchingPrices(search));
   }
 
-  /**
-   * Fetch historical market prices for given symbols
-   * @param {string} date - Date in YYYY-MM-DD format
-   * @param {string} symbols - Comma separated symbols
-   */
-  async getHistoricalPrices(date, symbols, base = 'USD') {
-    if (!this.apiKey || this.apiKey === 'your_commodities_api_key_here') {
-      console.warn('⚠️ Commodities API Key missing. Returning MOCK data.');
-      return this._getMockHistoricalPrices(date, symbols);
-    }
-
-    try {
-      // Some APIs use a different endpoint for historical data (e.g., /YYYY-MM-DD or /historical)
-      const response = await axios.get(`${this.baseUrl}/${date}`, {
-        params: {
-          access_key: this.apiKey,
-          base,
-          symbols
-        }
-      });
-
-      return response.data;
-    } catch (error) {
-      console.error('Commodities API Historical Error:', error.response?.data || error.message);
-      throw new Error(`Failed to fetch historical market prices for ${date}`);
-    }
+  async getHistoricalPrices(date, search = '') {
+    return this._buildPriceResponse(this.findMatchingPrices(search), date);
   }
 
-  // ==== Mock Data Generators for Hackathon MVP Usage ====
-  
-  _getMockLatestPrices(symbols) {
-    const symbolList = symbols ? symbols.split(',') : ['WHEAT', 'CORN', 'COFFEE', 'SUGAR'];
-    const rates = {};
-    
-    // Generate some deterministic but realistic mock prices based on symbol length
-    symbolList.forEach(sym => {
-      rates[sym] = (sym.length * 0.01) + (Math.random() * 0.05);
-    });
+  findMatchingPrices(search = '') {
+    const normalizedSearch = this._normalize(search);
+    if (!normalizedSearch) {
+      return this.priceEntries;
+    }
 
+    const tokens = normalizedSearch.split(' ').filter(Boolean);
+
+    return this.priceEntries
+      .map((entry) => ({
+        entry,
+        score: this._scoreEntry(entry, tokens, normalizedSearch),
+      }))
+      .filter((item) => item.score > 0)
+      .sort((left, right) => right.score - left.score || right.entry.suggested - left.entry.suggested)
+      .map((item) => item.entry);
+  }
+
+  getPriceContext(search = '') {
+    const matches = this.findMatchingPrices(search).slice(0, 6);
+    return {
+      currency: this.currency,
+      matches,
+      contextText: this._buildContextText(matches),
+    };
+  }
+
+  _buildPriceResponse(prices, date = new Date().toISOString().split('T')[0]) {
     return {
       data: {
         success: true,
-        timestamp: Math.floor(Date.now() / 1000),
-        base: 'USD',
-        date: new Date().toISOString().split('T')[0],
-        rates
+        currency: this.currency,
+        date,
+        count: prices.length,
+        prices,
       }
     };
   }
 
-  _getMockHistoricalPrices(date, symbols) {
-    const data = this._getMockLatestPrices(symbols);
-    data.data.date = date; // Set to the requested date
-    return data;
+  _buildContextText(matches) {
+    if (!matches.length) {
+      return 'No direct market price match was found in the local produce price table.';
+    }
+
+    return matches
+      .map((entry) => `${entry.commodity} (${entry.variety}) low ${entry.low} ${this.currency}, high ${entry.high} ${this.currency}, frequent ${entry.freq} ${this.currency}`)
+      .join('\n');
+  }
+
+  _scoreEntry(entry, tokens, normalizedSearch) {
+    const commodityText = this._normalize(entry.commodity);
+    const varietyText = this._normalize(entry.variety);
+    const combined = `${commodityText} ${varietyText}`.trim();
+
+    let score = 0;
+    if (combined.includes(normalizedSearch)) {
+      score += 6;
+    }
+
+    for (const token of tokens) {
+      if (commodityText.includes(token)) {
+        score += 3;
+      }
+      if (varietyText.includes(token)) {
+        score += 2;
+      }
+    }
+
+    return score;
+  }
+
+  _normalize(value = '') {
+    return value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
   }
 }
 
