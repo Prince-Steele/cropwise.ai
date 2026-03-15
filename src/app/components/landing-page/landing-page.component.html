@@ -1,0 +1,162 @@
+<div class="landing-wrapper">
+  <!-- Interactive background to match design system -->
+  <div class="hero-bg"></div>
+
+  <!-- 1. Top Nav -->
+  <nav class="landing-nav glass-card">
+    <div class="logo-container">
+      <div class="logo-circle">
+        <div class="logo-inner"></div>
+      </div>
+      <h2>AgriSense</h2>
+    </div>
+    <div class="nav-actions">
+      <a routerLink="/login" class="btn btn-outline">Login</a>
+      <a routerLink="/signup" class="btn btn-primary glow-effect">Get Started</a>
+    </div>
+  </nav>
+
+  <main class="landing-content">
+    <!-- 2. Hero Section -->
+    <section class="section-wrapper hero-section">
+      <div class="container hero-grid">
+        <div class="hero-text-content animate-up">
+          <h1 class="hero-title">Empower Your Farm with <span class="text-primary">Data-Driven</span> Decisions</h1>
+          <p class="hero-description text-muted mb-6">
+            AgriSense helps you predict crop yields, maximize market margins, and eliminate the guesswork of seasonal planting in Jamaica and beyond.
+          </p>
+          <div class="hero-actions flex gap-4">
+            <a routerLink="/signup" class="btn btn-primary btn-large">Start Free Trial</a>
+            <a href="#how-it-works" class="btn btn-outline btn-large">See How It Works</a>
+          </div>
+        </div>
+        <div class="hero-visual animate-up-delay-1">
+          <div class="hero-card-stack">
+            <!-- Main visual card -->
+            <div class="glass-card main-dashboard-card">
+              <div class="card-header flex justify-between items-center mb-4">
+                <h3 class="text-white">Yield Forecast: Tomatoes</h3>
+                <span class="stat-badge text-primary bg-primary-light">+24% Expected</span>
+              </div>
+              <div class="chart-placeholder">
+                <div class="bar bar-1"></div>
+                <div class="bar bar-2"></div>
+                <div class="bar bar-3"></div>
+                <div class="bar bar-4 active"></div>
+                <div class="bar bar-5"></div>
+              </div>
+            </div>
+            <!-- Floating stat chips -->
+            <div class="stat-chip glass-card chip-1">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-primary"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Market Demand High</span>
+            </div>
+            <div class="stat-chip glass-card chip-2">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-secondary"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>+15% Price Surge</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Features Section -->
+    <section id="features" class="section-wrapper bg-surface-light">
+      <div class="container animate-up-delay-2">
+        <div class="section-header text-center mb-6">
+          <h2 class="section-title">Why choose AgriSense?</h2>
+          <p class="text-muted">Advanced tools to optimize your agricultural business.</p>
+        </div>
+        <div class="feature-grid">
+          <div class="feature-card glass-card hover-glow">
+            <div class="icon-wrapper">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <h3 class="text-white mb-2">Smart Planting</h3>
+            <p class="text-muted">Know exactly what to plant and when to maximize your margins.</p>
+          </div>
+          <div class="feature-card glass-card hover-glow">
+            <div class="icon-wrapper">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <h3 class="text-white mb-2">Yield Prediction</h3>
+            <p class="text-muted">AI forecasting to predict your harvest with precision down to the day.</p>
+          </div>
+          <div class="feature-card glass-card hover-glow">
+            <div class="icon-wrapper">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 8v8"/></svg>
+            </div>
+            <h3 class="text-white mb-2">Market Insights</h3>
+            <p class="text-muted">Stay ahead of price fluctuations and optimize your sales strategies globally.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. How It Works Section -->
+    <section id="how-it-works" class="section-wrapper">
+      <div class="container animate-up-delay-3">
+        <div class="section-header text-center mb-6">
+          <h2 class="section-title">How It Works</h2>
+          <p class="text-muted">Three simple steps to transform your farming strategy.</p>
+        </div>
+        <div class="steps-row">
+          <div class="step-item text-center">
+            <div class="step-badge glass-card">1</div>
+            <h4 class="text-white mt-4 mb-2">Create Profile</h4>
+            <p class="text-muted text-sm">Input your location and farm size to calibrate predictions.</p>
+          </div>
+          <div class="step-connector"></div>
+          <div class="step-item text-center">
+            <div class="step-badge glass-card">2</div>
+            <h4 class="text-white mt-4 mb-2">Get Insights</h4>
+            <p class="text-muted text-sm">View real-time market data and crop recommendations.</p>
+          </div>
+          <div class="step-connector"></div>
+          <div class="step-item text-center">
+            <div class="step-badge glass-card">3</div>
+            <h4 class="text-white mt-4 mb-2">Maximize Profits</h4>
+            <p class="text-muted text-sm">Plant with confidence and sell when demand is highest.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Impact/Testimonials Section -->
+    <section class="section-wrapper pb-6">
+      <div class="container animate-up-delay-3">
+        <div class="glass-card impact-card flex flex-col items-center text-center">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary mb-4 opacity-75"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path></svg>
+          <h3 class="impact-quote text-white mb-4">"AgriSense completely changed how I plan my seasons. I avoided the tomato glut and capitalized on sweet peppers instead, increasing my revenue by 40%."</h3>
+          <div class="farmer-meta flex items-center gap-4">
+            <div class="farmer-avatar"></div>
+            <div class="text-left">
+              <strong class="text-white block">Marcus Johnson</strong>
+              <span class="text-muted text-sm">15-Acre Farmer, St. Elizabeth</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 6. Footer -->
+  <footer class="landing-footer glass-card border-top-only">
+    <div class="container flex justify-between items-center footer-content">
+      <div class="brand-info">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="logo-inner bg-primary" style="width: 12px; height: 12px; border-radius: 50%;"></div>
+          <strong class="text-white">AgriSense</strong>
+        </div>
+        <p class="text-muted text-sm m-0">Empowering farmers with data.</p>
+      </div>
+      <div class="footer-links flex gap-4">
+        <a href="#" class="text-muted hover-text-white text-sm">About</a>
+        <a href="#" class="text-muted hover-text-white text-sm">Contact</a>
+        <a href="#" class="text-muted hover-text-white text-sm">Privacy</a>
+        <a href="#" class="text-muted hover-text-white text-sm">Terms</a>
+      </div>
+    </div>
+  </footer>
+</div>

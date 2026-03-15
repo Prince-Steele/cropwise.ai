@@ -1,0 +1,414 @@
+/* Global Overrides for Component */
+.landing-wrapper {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: var(--color-bg);
+}
+
+/* Ensure global app background is removed so component bg shows */
+.hero-bg, .bg-overlay {
+  display: none;
+}
+
+/* Reusable Layout Wrappers */
+.section-wrapper {
+  padding: 5rem 0;
+  width: 100%;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* 1. Top Navigation */
+.landing-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem auto 0;
+  max-width: 1200px;
+  width: calc(100% - 4rem);
+  border-radius: 100px;
+  position: sticky;
+  top: 1.5rem;
+  z-index: 50;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), #228b22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+.logo-inner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  opacity: 0.9;
+}
+
+.landing-nav h2 {
+  margin: 0;
+  color: var(--text-main);
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: -0.5px;
+}
+
+.btn-outline {
+  padding: 0.5rem 1.25rem;
+  border-radius: 100px;
+  color: var(--text-main);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all var(--transition-smooth);
+}
+
+.btn-outline:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.landing-nav .btn-primary {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.95rem;
+}
+
+/* 2. Hero Section */
+.hero-section {
+  padding-top: 4rem;
+  padding-bottom: 6rem;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -1.5px;
+}
+
+.hero-description {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  max-width: 90%;
+}
+
+.btn-large {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 100px;
+  text-decoration: none;
+}
+
+/* Hero Visual (Dashboard Preview) */
+.hero-visual {
+  position: relative;
+  width: 100%;
+}
+
+.hero-card-stack {
+  position: relative;
+  width: 100%;
+  height: 400px;
+}
+
+.main-dashboard-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 450px;
+  z-index: 2;
+  padding: 2rem;
+}
+
+.stat-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+  background: rgba(16, 185, 129, 0.15);
+}
+
+.chart-placeholder {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  height: 150px;
+  margin-top: 2rem;
+}
+
+.chart-placeholder .bar {
+  flex: 1;
+  background: var(--color-border);
+  border-radius: 4px 4px 0 0;
+  transition: height 1s ease;
+}
+
+.bar-1 { height: 30%; }
+.bar-2 { height: 50%; }
+.bar-3 { height: 40%; }
+.bar-4.active { height: 85%; background: var(--color-primary); box-shadow: 0 0 15px var(--color-primary-glow); }
+.bar-5 { height: 60%; }
+
+.stat-chip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 3;
+}
+
+.chip-1 {
+  top: 10%;
+  left: -5%;
+  animation: float 6s ease-in-out infinite;
+}
+
+.chip-2 {
+  bottom: 10%;
+  right: -5%;
+  animation: float 7s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+/* 3. Features Section */
+.bg-surface-light {
+  background: linear-gradient(180deg, transparent, rgba(30, 41, 59, 0.2) 50%, transparent);
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+}
+
+.section-header {
+  max-width: 600px;
+  margin: 0 auto 4rem;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(16, 185, 129, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: var(--color-primary);
+}
+
+/* 4. How It Works */
+.steps-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.step-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.step-badge {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  background: var(--color-bg);
+  padding: 0;
+}
+
+.step-connector {
+  flex: 1;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  margin-top: 30px;
+  z-index: 1;
+}
+
+/* 5. Impact Testimonial */
+.impact-card {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3rem 4rem;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(30, 41, 59, 0.4));
+  border-top: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.impact-quote {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: -0.5px;
+}
+
+.farmer-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+}
+
+/* 6. Footer */
+.landing-footer {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  padding: 2rem 0;
+}
+
+.hover-text-white:hover {
+  color: #fff;
+}
+
+/* Utility Animations from previous version preserved */
+.animate-up {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-up-delay-1 {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+
+.animate-up-delay-2 {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+}
+
+.animate-up-delay-3 {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Overrides */
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .hero-description {
+    margin: 0 auto 1.5rem;
+  }
+  
+  .hero-actions {
+    justify-content: center;
+  }
+  
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .steps-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+  }
+  
+  .step-connector {
+    display: none;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .btn-large {
+    width: 100%;
+  }
+  
+  .impact-card {
+    padding: 2rem;
+  }
+  
+  .impact-quote {
+    font-size: 1.25rem;
+  }
+}

@@ -1,0 +1,130 @@
+/* Auth Wrapper Layout */
+.auth-wrapper {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: var(--color-bg);
+}
+
+.auth-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top left, rgba(16, 185, 129, 0.05), transparent 40%),
+              radial-gradient(circle at bottom right, rgba(245, 158, 11, 0.05), transparent 40%);
+  pointer-events: none;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* Two-Column Card Layout */
+.auth-card {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  overflow: hidden;
+  padding: 0; /* Override global glass-card padding */
+}
+
+/* Left Sidebar - Branding */
+.auth-sidebar {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.logo-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), #228b22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+.logo-inner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  opacity: 0.9;
+}
+
+.bg-primary-light {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+/* Right Side - Form */
+.auth-form-wrapper {
+  background: transparent;
+}
+
+/* Utilities */
+.transition-smooth {
+  transition: all var(--transition-smooth);
+}
+
+.hover-text-white:hover {
+  color: #ffffff;
+}
+
+/* Input Overrides */
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+/* Animations */
+.animate-up {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-up-delay-1 {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+}
+
+.animate-up-delay-2 {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Mobile Layout */
+@media (max-width: 768px) {
+  .auth-card {
+    flex-direction: column;
+    max-width: 450px;
+  }
+  
+  .auth-sidebar {
+    display: none; /* Hide branding sidebar on mobile to save space */
+  }
+  
+  .auth-form-wrapper {
+    width: 100%;
+    padding: 2.5rem 2rem;
+  }
+}
