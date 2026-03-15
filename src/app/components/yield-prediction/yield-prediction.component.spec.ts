@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormsModule } from '@angular/forms';
 
 import { YieldPredictionComponent } from './yield-prediction.component';
 
@@ -8,7 +10,8 @@ describe('YieldPredictionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ YieldPredictionComponent ]
+      declarations: [ YieldPredictionComponent ],
+      imports: [HttpClientTestingModule, FormsModule]
     })
     .compileComponents();
 

@@ -1,21 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { WeatherSnapshot } from '../models/weather.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WeatherService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  // Mock implementation for Open-Meteo API
-  getCurrentWeather(location: string): Observable<any> {
-    return of({
-      temperature: 28,
-      condition: 'Sunny',
-      humidity: 15,
-      location: location || 'St. Ann, Jamaica'
-    }).pipe(delay(500));
+  getCurrentWeather(location: string): Observable<WeatherSnapshot> {
+    const params = location ? new HttpParams().set('location', location) : undefined;
+    return this.http.get<WeatherSnapshot>(`${environment.apiUrl}/weather`, { params });
   }
 }

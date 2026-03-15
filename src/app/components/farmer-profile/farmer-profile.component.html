@@ -1,102 +1,94 @@
-<div class="profile-container animate-fade-in">
+<div class="profile-container animate-fade-in" *ngIf="profile as profile">
   <!-- Profile Header -->
   <div class="glass-card profile-header mb-6">
     <div class="flex items-center gap-6">
-      <div class="profile-avatar">👨‍🌾</div>
+      <div class="profile-avatar">
+        <i class="fa-solid fa-user"></i>
+      </div>
       <div class="profile-info">
-        <h2 class="mb-1 text-primary">Marcus Johnson</h2>
-        <p class="mb-2 text-muted">St. Ann, Jamaica • Active since 2021</p>
-        <div class="flex gap-4 mt-2">
-          <span class="badge badge-accent">12 Acres Total</span>
-          <span class="badge badge-outline">Organic Certified</span>
+        <h2 class="mb-1">{{profile.name}}</h2>
+        <p class="mb-2 profile-location">
+          <i class="fa-solid fa-location-dot"></i> {{profile.location}} &bull; Active since {{profile.activeSince}}
+        </p>
+        <div class="flex gap-2 flex-wrap">
+          <span class="badge badge-accent"><i class="fa-solid fa-ruler-combined"></i> {{profile.totalAcres}} Acres Total</span>
+          <span *ngFor="let cert of profile.certifications" class="badge badge-outline"><i class="fa-solid fa-certificate"></i> {{cert}}</span>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="grid grid-cols-12 gap-6">
-    
-    <!-- Overall Stats -->
-    <div style="grid-column: span 4;" class="flex-col gap-6">
-      <div class="glass-card stat-card">
-        <h4 class="mb-4">Lifetime Yield Summary</h4>
-        <div class="mb-4">
-          <div class="stat-number text-secondary">42,500 kg</div>
+  <div class="profile-grid">
+
+    <!-- Left Column: Stats + Actions -->
+    <div class="left-column">
+      <div class="glass-card stat-card mb-6">
+        <h4 class="mb-4"><i class="fa-solid fa-chart-pie section-icon"></i> Lifetime Yield Summary</h4>
+        <div class="profile-stat mb-4">
+          <div class="stat-icon-wrap amber-bg"><i class="fa-solid fa-weight-scale"></i></div>
+          <div class="stat-number text-secondary">{{profile.lifetimeYield | number}} kg</div>
           <div class="text-xs text-muted">Total Crop Produced</div>
         </div>
-        <div class="mb-4">
-          <div class="stat-number text-primary">8</div>
+        <div class="profile-stat mb-4">
+          <div class="stat-icon-wrap primary-bg"><i class="fa-solid fa-check-circle"></i></div>
+          <div class="stat-number text-primary">{{profile.successfulHarvests}}</div>
           <div class="text-xs text-muted">Successful Harvests</div>
         </div>
-        <div class="mb-0">
-          <div class="stat-number">3</div>
+        <div class="profile-stat mb-0">
+          <div class="stat-icon-wrap accent-bg"><i class="fa-solid fa-leaf"></i></div>
+          <div class="stat-number">{{profile.primaryCrops}}</div>
           <div class="text-xs text-muted">Primary Crop Types</div>
         </div>
       </div>
-      
+
       <!-- Quick Actions -->
       <div class="glass-card">
-        <h4 class="mb-4">Quick Actions</h4>
-        <button class="btn-primary w-full mb-3" routerLink="/advisor">Plan Next Cycle</button>
-        <button class="btn-outline w-full mb-3">Download Yield Report</button>
-        <button class="btn-outline w-full text-danger border-danger">Report Disease/Pest</button>
+        <h4 class="mb-4"><i class="fa-solid fa-bolt section-icon"></i> Quick Actions</h4>
+        <button class="btn-primary w-full mb-3" routerLink="/advisor">
+          <i class="fa-solid fa-seedling"></i> Plan Next Cycle
+        </button>
+        <button class="btn-outline w-full mb-3">
+          <i class="fa-solid fa-download"></i> Download Yield Report
+        </button>
+        <button class="btn-outline w-full text-danger border-danger">
+          <i class="fa-solid fa-bug"></i> Report Disease/Pest
+        </button>
       </div>
     </div>
 
-    <!-- Planting History Table -->
-    <div class="glass-card history-area" style="grid-column: span 8;">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="mb-0">Planting History</h3>
-        <button class="btn-outline btn-sm">Filter</button>
+    <!-- Right Column: Planting History -->
+    <div class="glass-card history-area">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="mb-0"><i class="fa-solid fa-clock-rotate-left section-icon"></i> Planting History</h3>
+        <button class="btn-outline btn-sm"><i class="fa-solid fa-filter"></i> Filter</button>
       </div>
 
       <div class="history-list">
-        
-        <!-- History Item 1 -->
-        <div class="history-item">
+        <div *ngFor="let item of profile.history" class="history-item">
           <div class="flex items-center gap-4">
-            <div class="crop-icon">🍅</div>
+            <div class="crop-icon"><i class="fa-solid" [ngClass]="getCropIcon(item.crop)"></i></div>
             <div>
-              <h4 class="mb-1">Tomato (Spring 2023)</h4>
-              <p class="mb-0 text-xs text-muted">Harvested in June • 2.5 Acres</p>
+              <h4 class="mb-1">{{item.crop}} ({{item.season}})</h4>
+              <p class="mb-0 text-xs text-muted">Harvested in {{item.harvested || item.season}} &bull; {{item.acres}} Acres</p>
             </div>
           </div>
           <div class="text-right">
-            <div class="yield-amount">+ 8,500 kg</div>
-            <div class="text-xs text-success">Optimal Yield Achieved</div>
-          </div>
-        </div>
-
-        <!-- History Item 2 -->
-        <div class="history-item">
-          <div class="flex items-center gap-4">
-            <div class="crop-icon">🌶️</div>
-            <div>
-              <h4 class="mb-1">Sweet Pepper (Winter 2022)</h4>
-              <p class="mb-0 text-xs text-muted">Harvested in Feb • 1.5 Acres</p>
+            <div class="yield-amount text-primary">+ {{item.yield | number}} kg</div>
+            <div class="text-xs" [ngClass]="{ 'text-success': item.type === 'success', 'text-warning': item.type === 'warning', 'text-danger': item.type === 'danger' }">
+              {{item.status}}
             </div>
           </div>
-          <div class="text-right">
-            <div class="yield-amount">+ 3,200 kg</div>
-            <div class="text-xs text-warning">Drought impacted yield</div>
-          </div>
         </div>
 
-        <!-- History Item 3 -->
-        <div class="history-item">
+        <div *ngIf="profile.history.length === 0" class="history-item empty-item">
           <div class="flex items-center gap-4">
-            <div class="crop-icon">🥔</div>
+            <div class="crop-icon"><i class="fa-solid fa-seedling"></i></div>
             <div>
-              <h4 class="mb-1">Yellow Yam (Spring 2022)</h4>
-              <p class="mb-0 text-xs text-muted">Harvested in Jan 2023 • 3 Acres</p>
+              <h4 class="mb-1">No History Yet</h4>
+              <p class="mb-0 text-xs text-muted">Start logging harvests to see your history.</p>
             </div>
           </div>
-          <div class="text-right">
-            <div class="yield-amount">+ 12,000 kg</div>
-            <div class="text-xs text-success">Excellent Harvest</div>
-          </div>
         </div>
-
       </div>
     </div>
   </div>

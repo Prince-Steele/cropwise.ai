@@ -1,45 +1,59 @@
-<div class="app-container">
-  <!-- Sidebar Navigation -->
-  <nav class="sidebar glass-card">
-    <div class="sidebar-header">
-      <div class="logo-circle"></div>
-      <h2>AgriSense</h2>
+<!-- Top Navigation Bar -->
+<nav class="top-navbar">
+  <div class="navbar-inner">
+    <div class="navbar-brand">
+      <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="logo-icon">
+        <i class="fa-solid fa-leaf"></i>
+      </div>
+      <span class="brand-text">AgriSense</span>
     </div>
-    
-    <div class="nav-links">
-      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
-        <span class="icon">📊</span>
+
+    <div class="navbar-links" [class.mobile-open]="isMobileMenuOpen">
+      <div class="mobile-header">
+        <div class="flex items-center gap-2">
+          <div class="logo-icon"><i class="fa-solid fa-leaf"></i></div>
+          <span class="brand-text">AgriSense</span>
+        </div>
+        <button class="mobile-close-btn" (click)="toggleMobileMenu()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
+        <i class="fa-solid fa-chart-column"></i>
         <span>Dashboard</span>
       </a>
-      <a routerLink="/advisor" routerLinkActive="active" class="nav-item">
-        <span class="icon">🌱</span>
+      <a routerLink="/advisor" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
+        <i class="fa-solid fa-seedling"></i>
         <span>Planting Advisor</span>
       </a>
-      <a routerLink="/prediction" routerLinkActive="active" class="nav-item">
-        <span class="icon">📈</span>
+      <a routerLink="/prediction" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
+        <i class="fa-solid fa-chart-line"></i>
         <span>Yield Prediction</span>
       </a>
-      <a routerLink="/profile" routerLinkActive="active" class="nav-item profile-link">
-        <span class="icon">🧑‍🌾</span>
-        <span>Farmer Profile</span>
+      <a routerLink="/profile" routerLinkActive="active" (click)="closeMobileMenu()" class="nav-link">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
       </a>
     </div>
-  </nav>
 
-  <!-- Main Content Area -->
-  <main class="main-content">
-    <header class="top-header glass-card">
-      <div class="header-title">
-        <h3 class="mb-1 text-primary">AI-Powered Agricultural Assistant</h3>
-        <p class="mb-0">Optimize your yield with data-driven insights</p>
+    <!-- Mobile overlay -->
+    <div class="mobile-overlay" *ngIf="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+    <div class="navbar-actions">
+      <div class="navbar-greeting">
+        <span class="greeting-text">AI-Powered Agricultural Assistant</span>
       </div>
-      <div class="user-info">
-        <div class="avatar">👨‍🌾</div>
+      <div class="user-avatar" routerLink="/profile">
+        <i class="fa-solid fa-user"></i>
       </div>
-    </header>
-    
-    <div class="content-wrapper">
-      <router-outlet></router-outlet>
     </div>
-  </main>
-</div>
+  </div>
+</nav>
+
+<!-- Main Content Area -->
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>

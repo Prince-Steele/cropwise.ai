@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { finalize } from 'rxjs/operators';
+import { AdvisorRequest, AdvisorResponse } from '../../models/advisor.model';
+import { AdvisorService } from '../../services/advisor.service';
 
 @Component({
   selector: 'app-planting-advisor',
@@ -7,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlantingAdvisorComponent implements OnInit {
 
-  formData = {
+  formData: AdvisorRequest = {
     location: '',
     landSize: null,
     season: 'Spring',
@@ -16,8 +19,9 @@ export class PlantingAdvisorComponent implements OnInit {
 
   isAnalyzing = false;
   hasResults = false;
+  recommendations: AdvisorResponse | null = null;
 
-  constructor() { }
+  constructor(private advisorService: AdvisorService) { }
 
   ngOnInit(): void {
   }
@@ -29,12 +33,31 @@ export class PlantingAdvisorComponent implements OnInit {
     
     this.isAnalyzing = true;
     this.hasResults = false;
+    this.recommendations = null;
 
-    // Simulate AI Processing Latency
-    setTimeout(() => {
-      this.isAnalyzing = false;
-      this.hasResults = true;
-    }, 2500);
+    this.advisorService.getRecommendations(this.formData)
+      .pipe(finalize(() => {
+        this.isAnalyzing = false;
+      }))
+      .subscribe({
+        next: (response) => {
+          this.recommendations = response;
+          this.hasResults = true;
+        },
+        error: () => {
+          this.hasResults = false;
+          this.recommendations = null;
+        }
+      });
+  }
+
+  getCropIcon(crop: string): string {
+    const normalized = crop.toLowerCase();
+    if (normalized.includes('pepper')) return 'fa-pepper-hot';
+    if (normalized.includes('yam')) return 'fa-carrot';
+    if (normalized.includes('callaloo')) return 'fa-leaf';
+    if (normalized.includes('tomato')) return 'fa-apple-whole';
+    return 'fa-seedling';
   }
 
 }

@@ -4,82 +4,87 @@
     <p>Welcome back! Here's your farm's status today.</p>
   </div>
 
-  <div class="grid grid-cols-3 gap-6 mb-6">
+  <div class="stats-grid mb-6">
     <!-- Weather Widget -->
     <div class="glass-card weather-widget">
-      <div class="flex justify-between items-center mb-3">
+      <div class="card-header mb-3">
         <h4 class="mb-0">Current Weather</h4>
-        <span class="icon weather-icon">☀️</span>
+        <span class="weather-icon"><i class="fa-solid fa-sun"></i></span>
       </div>
       <div class="weather-data">
-        <h2 class="temperature text-secondary">28°C</h2>
-        <p class="condition">Sunny, 15% Humidity</p>
-        <p class="location-text">📍 St. Ann, Jamaica</p>
+        <h2 class="temperature">{{(weather?.temperature ?? '--')}}&deg;C</h2>
+        <p class="condition mb-1">{{weather?.condition || 'Loading'}}{{weather ? ', ' : ''}}{{(weather?.humidity ?? '--')}}% Humidity</p>
+        <p class="location-text mb-0">
+          <i class="fa-solid fa-location-dot"></i>
+          {{weather?.location || 'St. Ann, Jamaica'}}
+        </p>
       </div>
     </div>
 
     <!-- Quick Stats -->
     <div class="glass-card stat-card">
-      <div class="flex-col pb-2">
+      <div class="stat-block pb-2">
         <span class="stat-label">Total Land Evaluated</span>
-        <span class="stat-value text-primary">12 Acres</span>
+        <span class="stat-value text-primary">{{totalAcres || '--'}} Acres</span>
       </div>
-      <div class="flex-col pt-3 border-top">
+      <div class="stat-block pt-3 border-top">
         <span class="stat-label">Current Season</span>
-        <span class="stat-value">Spring</span>
+        <span class="stat-value">{{currentSeason}}</span>
       </div>
     </div>
 
     <!-- AI Advisor Teaser -->
-    <div class="glass-card advisor-teaser flex-col justify-between">
+    <div class="glass-card advisor-teaser">
       <div>
-        <h4 class="mb-2">AI Planting Advisor</h4>
+        <h4 class="mb-2"><i class="fa-solid fa-robot teaser-icon"></i> AI Planting Advisor</h4>
         <p>Ready to plan your next crop cycle? Get AI-driven recommendations tailored to your land.</p>
       </div>
-      <button class="btn-primary mt-2" routerLink="/advisor">Get Recommendations ✨</button>
+      <button class="btn-primary mt-2" routerLink="/advisor">
+        <i class="fa-solid fa-star"></i>
+        Get Recommendations
+      </button>
     </div>
   </div>
 
-  <div class="grid grid-cols-2 gap-6">
+  <div class="bottom-grid">
     <!-- Recent Recommendations -->
     <div class="glass-card">
-      <h4 class="mb-4">Recent Recommendations</h4>
+      <h4 class="mb-4"><i class="fa-solid fa-clipboard-list section-icon"></i> Recent Recommendations</h4>
       <div class="recommendation-list">
-        <div class="recommendation-item">
+        <div *ngFor="let item of recommendations" class="recommendation-item">
           <div class="flex items-center gap-4">
-            <div class="crop-icon">🍅</div>
+            <div class="crop-icon"><i class="fa-solid" [ngClass]="getCropIcon(item.crop)"></i></div>
             <div>
-              <h5 class="mb-1">Tomatoes</h5>
-              <p class="mb-0 text-xs">High Yield Potential • Low Risk</p>
+              <h5 class="mb-1">{{item.crop}}</h5>
+              <p class="mb-0 text-xs text-muted">{{item.note || item.risk}}</p>
             </div>
           </div>
-          <span class="badge badge-success">Recommended</span>
+          <span class="badge badge-success">{{item.recommended ? 'Recommended' : 'Suggested'}}</span>
         </div>
-        <div class="recommendation-item">
+        <div *ngIf="recommendations.length === 0" class="recommendation-item empty-item">
           <div class="flex items-center gap-4">
-            <div class="crop-icon">🌿</div>
+            <div class="crop-icon"><i class="fa-solid fa-seedling"></i></div>
             <div>
-              <h5 class="mb-1">Callaloo</h5>
-              <p class="mb-0 text-xs">Moderate Yield • Very Low Risk</p>
+              <h5 class="mb-1">No Recommendations Yet</h5>
+              <p class="mb-0 text-xs text-muted">Run the advisor to generate crop suggestions.</p>
             </div>
           </div>
-          <span class="badge badge-success">Recommended</span>
         </div>
       </div>
     </div>
 
     <!-- Quick Start Yield Prediction -->
     <div class="glass-card">
-      <h4 class="mb-4">Quick Yield Estimate</h4>
+      <h4 class="mb-4"><i class="fa-solid fa-chart-line section-icon"></i> Quick Yield Estimate</h4>
       <p class="mb-3">Quickly calculate potential yield for a crop.</p>
-      <div class="flex gap-2">
+      <div class="quick-yield-form">
         <select class="form-control">
           <option>Select Crop...</option>
           <option>Tomato</option>
           <option>Callaloo</option>
           <option>Pepper</option>
         </select>
-        <input type="number" class="form-control" placeholder="Acres" style="width: 100px;">
+        <input type="number" class="form-control acres-input" placeholder="Acres">
         <button class="btn-primary" routerLink="/prediction">Calculate</button>
       </div>
     </div>

@@ -2,16 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { FarmerProfile } from '../models/profile.model';
+import { YieldRequest, YieldResponse } from '../models/yield.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProfileService {
-
+export class YieldService {
   constructor(private http: HttpClient) { }
 
-  getFarmerProfile(): Observable<FarmerProfile> {
-    return this.http.get<FarmerProfile>(`${environment.apiUrl}/profile`);
+  calculateYield(payload: YieldRequest): Observable<YieldResponse> {
+    return this.http.post<YieldResponse>(`${environment.apiUrl}/yield`, payload);
   }
 }

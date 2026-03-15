@@ -1,21 +1,21 @@
 <div class="advisor-container animate-fade-in">
   <div class="header-section mb-6">
-    <h2 class="mb-1 text-primary">AI Planting Advisor</h2>
+    <h2 class="mb-1"><i class="fa-solid fa-seedling header-icon"></i> AI Planting Advisor</h2>
     <p>Get data-driven crop recommendations based on your land and current conditions.</p>
   </div>
 
-  <div class="grid grid-cols-12 gap-6">
+  <div class="advisor-grid">
     <!-- Input Form Area -->
-    <div class="glass-card form-area" style="grid-column: span 5;">
-      <h3 class="mb-4">Farm Details</h3>
-      
+    <div class="glass-card form-area">
+      <h3 class="mb-4"><i class="fa-solid fa-clipboard-list section-icon"></i> Farm Details</h3>
+
       <form (ngSubmit)="analyze()" #advisorForm="ngForm" class="flex-col gap-4">
         <div class="form-group">
           <label class="form-label">Location</label>
           <input type="text" class="form-control" name="location" [(ngModel)]="formData.location" placeholder="e.g., St. Ann, Jamaica" required>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="form-row">
           <div class="form-group">
             <label class="form-label">Land Size (Acres)</label>
             <input type="number" class="form-control" name="landSize" [(ngModel)]="formData.landSize" placeholder="2.5" required>
@@ -34,80 +34,80 @@
         <div class="form-group mb-4">
           <label class="form-label">Recent Crop History</label>
           <input type="text" class="form-control" name="history" [(ngModel)]="formData.history" placeholder="e.g., Yam, Pepper">
-          <small class="text-muted mt-1 block">Separate multiple crops with commas</small>
+          <small class="form-hint">Separate multiple crops with commas</small>
         </div>
 
         <button type="submit" class="btn-primary w-full" [disabled]="isAnalyzing">
-          <span *ngIf="!isAnalyzing">Run AI Analysis ✨</span>
+          <span *ngIf="!isAnalyzing"><i class="fa-solid fa-wand-magic-sparkles"></i> Run AI Analysis</span>
           <span *ngIf="isAnalyzing" class="animate-pulse">Analyzing Data...</span>
         </button>
       </form>
     </div>
 
     <!-- Results Area -->
-    <div class="results-area" style="grid-column: span 7;">
+    <div class="results-area">
       <!-- Empty State -->
-      <div *ngIf="!hasResults && !isAnalyzing" class="empty-state glass-card flex-col items-center justify-center text-center">
-        <div class="empty-icon mb-4">🤖</div>
+      <div *ngIf="!hasResults && !isAnalyzing" class="empty-state glass-card">
+        <div class="empty-icon mb-3"><i class="fa-solid fa-robot"></i></div>
         <h4 class="mb-2">Awaiting Data</h4>
-        <p>Fill out your farm details and run the AI analysis to see personalized crop recommendations.</p>
+        <p class="mb-0">Fill out your farm details and run the AI analysis to see personalized crop recommendations.</p>
       </div>
 
       <!-- Loading State -->
-      <div *ngIf="isAnalyzing" class="loading-state glass-card flex-col items-center justify-center text-center">
-        <div class="spinner mb-4"></div>
+      <div *ngIf="isAnalyzing" class="loading-state glass-card">
+        <div class="spinner mb-3"></div>
         <h4 class="mb-2 text-primary">Processing Environmental Data</h4>
-        <p>Analyzing weather patterns, soil compatibility, and crop history...</p>
+        <p class="mb-0">Analyzing weather patterns, soil compatibility, and crop history...</p>
       </div>
 
       <!-- Results State -->
-      <div *ngIf="hasResults && !isAnalyzing" class="animate-fade-in">
-        <h3 class="mb-4">Recommended Crops</h3>
-        
-        <div class="recommendations-list flex-col gap-4">
+      <div *ngIf="hasResults && !isAnalyzing && recommendations as rec" class="animate-fade-in">
+        <h3 class="mb-4"><i class="fa-solid fa-trophy section-icon"></i> Recommended Crops</h3>
+
+        <div class="recommendations-list">
           <!-- Top Recommendation -->
           <div class="glass-card result-card top-choice">
-            <div class="absolute-badge">Top Choice</div>
-            <div class="flex justify-between items-start mb-4">
+            <div class="top-badge"><i class="fa-solid fa-crown"></i> Top Choice</div>
+            <div class="result-header mb-4">
               <div class="flex items-center gap-4">
-                <div class="crop-icon-lg">🍅</div>
+                <div class="crop-icon-lg"><i class="fa-solid" [ngClass]="getCropIcon(rec.topChoice.crop)"></i></div>
                 <div>
-                  <h3 class="mb-1">Tomato</h3>
-                  <div class="flex gap-2 text-xs">
-                    <span class="badge badge-success">Low Risk</span>
-                    <span class="badge badge-outline">60-80 Days</span>
+                  <h3 class="mb-1">{{rec.topChoice.crop}}</h3>
+                  <div class="flex gap-2">
+                    <span class="badge badge-success">{{rec.topChoice.risk}}</span>
+                    <span class="badge badge-outline">{{rec.topChoice.daysToHarvest || 'N/A'}}</span>
                   </div>
                 </div>
               </div>
               <div class="text-right">
-                <div class="est-yield text-primary">3,500 kg</div>
+                <div class="est-yield text-primary">{{rec.topChoice.estimatedYield | number}} kg</div>
                 <div class="text-xs text-muted">Estimated Yield</div>
               </div>
             </div>
-            <div class="analysis-explanation">
-              <strong>AI Insight:</strong> Tomatoes are highly compatible with your current Spring season and soil history. Expected weather patterns show optimal rainfall over the next 60 days.
+            <div class="ai-insight">
+              <i class="fa-solid fa-lightbulb insight-icon"></i>
+              <div><strong>AI Insight:</strong> {{rec.topChoice.insight}}</div>
             </div>
           </div>
 
-          <!-- Alternative 1 -->
-          <div class="glass-card result-card">
-            <div class="flex justify-between items-start mb-3">
+          <!-- Alternatives -->
+          <div *ngFor="let alt of rec.alternatives" class="glass-card result-card">
+            <div class="result-header mb-3">
               <div class="flex items-center gap-3">
-                <div class="crop-icon-md">🌶️</div>
+                <div class="crop-icon-md"><i class="fa-solid" [ngClass]="getCropIcon(alt.crop)"></i></div>
                 <div>
-                  <h4 class="mb-1">Sweet Pepper</h4>
-                  <div class="flex gap-2 text-xs">
-                    <span class="badge badge-warning">Medium Risk</span>
+                  <h4 class="mb-1">{{alt.crop}}</h4>
+                  <div class="flex gap-2">
+                    <span class="badge badge-warning">{{alt.risk}}</span>
                   </div>
                 </div>
               </div>
               <div class="text-right">
-                <div class="est-yield-sm text-secondary">2,100 kg</div>
+                <div class="est-yield-sm text-secondary">{{alt.estimatedYield | number}} kg</div>
               </div>
             </div>
-            <p class="text-sm mb-0">Good alternative, but requires more consistent irrigation in early stages.</p>
+            <p class="text-sm mb-0">{{alt.insight}}</p>
           </div>
-
         </div>
       </div>
     </div>

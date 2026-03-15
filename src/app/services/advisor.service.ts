@@ -1,34 +1,22 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { AdvisorRequest, AdvisorResponse } from '../models/advisor.model';
+import { Recommendation } from '../models/recommendation.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdvisorService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  getRecommendations(farmData: any): Observable<any> {
-    // Mock response simulating Python AI Backend
-    const mockResponse = {
-      topChoice: {
-        crop: 'Tomato',
-        risk: 'Low Risk',
-        estimatedYield: 3500,
-        daysToHarvest: '60-80 Days',
-        insight: 'Tomatoes are highly compatible with your current Spring season and soil history.'
-      },
-      alternatives: [
-        {
-          crop: 'Sweet Pepper',
-          risk: 'Medium Risk',
-          estimatedYield: 2100,
-          insight: 'Good alternative, but requires more consistent irrigation in early stages.'
-        }
-      ]
-    };
+  getRecommendations(farmData: AdvisorRequest): Observable<AdvisorResponse> {
+    return this.http.post<AdvisorResponse>(`${environment.apiUrl}/advisor`, farmData);
+  }
 
-    return of(mockResponse).pipe(delay(2000)); // Simulate AI engine latency
+  getRecentRecommendations(): Observable<Recommendation[]> {
+    return this.http.get<Recommendation[]>(`${environment.apiUrl}/recommendations`);
   }
 }
