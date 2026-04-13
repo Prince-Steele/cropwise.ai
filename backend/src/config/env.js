@@ -1,8 +1,23 @@
+const fs = require("fs");
 const dotenv = require("dotenv");
 const path = require("path");
 
-// Load environment variables from .env file
-dotenv.config({ path: path.join(__dirname, "../../.env") });
+const candidateEnvPaths = [
+  path.join(__dirname, "../../.env.local"),
+  path.join(__dirname, "../../.env"),
+  path.join(__dirname, "../../../.env.local"),
+  path.join(__dirname, "../../../.env"),
+];
+
+// Support the common backend/.env and backend/.env.local workflow first,
+// while still allowing a repo-root fallback when teams keep shared envs there.
+candidateEnvPaths
+  .filter((envPath, index) => candidateEnvPaths.indexOf(envPath) === index)
+  .forEach((envPath) => {
+    if (fs.existsSync(envPath)) {
+      dotenv.config({ path: envPath });
+    }
+  });
 
 module.exports = {
   port: process.env.PORT || 3000,
