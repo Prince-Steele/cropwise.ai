@@ -215,6 +215,14 @@
   border-color: var(--color-border-light);
 }
 
+.analysis-item {
+  align-items: flex-start;
+}
+
+.analysis-summary {
+  min-width: 120px;
+}
+
 .crop-icon {
   font-size: 1.5rem;
   color: var(--color-primary);

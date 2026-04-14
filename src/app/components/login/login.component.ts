@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent implements OnInit {
   errorMessage = '';
+  isSubmitting = false;
 
   constructor(
     private router: Router,
@@ -20,12 +21,20 @@ export class LoginComponent implements OnInit {
   async onLogin(email: string, password: string) {
     this.errorMessage = '';
 
-    if (email && password) {
-      await this.authService.login(email);
-      await this.router.navigateByUrl('/app/dashboard');
+    if (!email || !password) {
+      this.errorMessage = 'Enter both email and password to continue.';
       return;
     }
 
-    this.errorMessage = 'Enter both email and password to continue.';
+    this.isSubmitting = true;
+
+    try {
+      await this.authService.login(email, password);
+      await this.router.navigateByUrl('/app/dashboard');
+    } catch (error) {
+      this.errorMessage = error instanceof Error ? error.message : 'Unable to log in right now.';
+    } finally {
+      this.isSubmitting = false;
+    }
   }
 }

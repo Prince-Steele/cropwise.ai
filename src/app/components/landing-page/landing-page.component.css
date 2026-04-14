@@ -29,6 +29,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   padding: 1rem 1.5rem;
   margin: 1.5rem auto 0;
   max-width: 1200px;
@@ -43,6 +44,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  min-width: 0;
 }
 
 .logo-circle {
@@ -70,12 +72,15 @@
   font-weight: 700;
   font-size: 1.25rem;
   letter-spacing: -0.5px;
+  white-space: nowrap;
 }
 
 .nav-actions {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .btn-outline {
@@ -375,6 +380,46 @@
 }
 
 /* Responsive Overrides */
+@media (max-width: 760px) {
+  .landing-nav {
+    width: calc(100% - 1.5rem);
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 28px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+
+  .logo-container {
+    flex-shrink: 0;
+    gap: 0.6rem;
+  }
+
+  .landing-nav h2 {
+    font-size: 1rem;
+  }
+
+  .nav-actions {
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+    justify-content: flex-end;
+  }
+
+  .btn-outline,
+  .landing-nav .btn-primary {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .hero-section {
+    padding-top: 2.5rem;
+  }
+}
+
 @media (max-width: 900px) {
   .hero-grid {
     grid-template-columns: 1fr;
@@ -411,6 +456,10 @@
 }
 
 @media (max-width: 600px) {
+  .container {
+    padding: 0 1rem;
+  }
+
   .hero-title {
     font-size: 2.5rem;
   }
@@ -430,6 +479,30 @@
   
   .impact-quote {
     font-size: 1.25rem;
+  }
+
+  .landing-nav {
+    width: calc(100% - 1rem);
+    padding: 0.6rem 0.75rem;
+  }
+
+  .logo-container {
+    gap: 0.5rem;
+  }
+
+  .landing-nav h2 {
+    font-size: 0.9rem;
+  }
+
+  .nav-logo-img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .btn-outline,
+  .landing-nav .btn-primary {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
   }
 }
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FarmerProfile } from '../../models/profile.model';
 import { ProfileService } from '../../services/profile.service';
+import { RecommendationService, SavedRecommendationRecord } from '../../services/recommendation.service';
 
 @Component({
   selector: 'app-farmer-profile',
@@ -16,11 +17,18 @@ export class FarmerProfileComponent implements OnInit {
   isSaving = false;
   error = '';
   statusMessage = '';
+  analysisHistory: SavedRecommendationRecord[] = [];
+  historyError = '';
+  isHistoryLoading = true;
 
-  constructor(private profileService: ProfileService) { }
+  constructor(
+    private profileService: ProfileService,
+    private recommendationService: RecommendationService
+  ) { }
 
   ngOnInit(): void {
     this.loadProfile();
+    this.loadAnalysisHistory();
   }
 
   startEditing(): void {
@@ -143,6 +151,23 @@ export class FarmerProfileComponent implements OnInit {
       error: () => {
         this.profile = null;
         this.error = 'Unable to load profile data.';
+      }
+    });
+  }
+
+  private loadAnalysisHistory(): void {
+    this.isHistoryLoading = true;
+    this.historyError = '';
+
+    this.recommendationService.getMyHistory().subscribe({
+      next: (response) => {
+        this.analysisHistory = response.data || [];
+        this.isHistoryLoading = false;
+      },
+      error: (error) => {
+        this.analysisHistory = [];
+        this.historyError = error instanceof Error ? error.message : 'Unable to load saved analyses.';
+        this.isHistoryLoading = false;
       }
     });
   }

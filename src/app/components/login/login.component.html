@@ -89,9 +89,9 @@
           <a href="#" class="forgot-link">Forgot password?</a>
         </div>
 
-        <button type="submit" class="btn-submit">
+        <button type="submit" class="btn-submit" [disabled]="isSubmitting">
           <i class="fa-solid fa-right-to-bracket"></i>
-          Log In
+          {{ isSubmitting ? 'Logging In...' : 'Log In' }}
         </button>
 
         <p *ngIf="errorMessage" class="text-danger mt-3 mb-0">{{ errorMessage }}</p>

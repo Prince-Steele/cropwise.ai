@@ -174,5 +174,67 @@
         </div>
       </div>
     </div>
+
+    <div class="glass-card history-area">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="mb-0"><i class="fa-solid fa-microscope section-icon"></i> Past Analyses</h3>
+        <span class="badge badge-outline">{{analysisHistory.length}} Saved</span>
+      </div>
+
+      <div *ngIf="isHistoryLoading" class="history-item empty-item">
+        <div class="flex items-center gap-4">
+          <div class="crop-icon"><i class="fa-solid fa-spinner fa-spin"></i></div>
+          <div>
+            <h4 class="mb-1">Loading analysis history</h4>
+            <p class="mb-0 text-xs text-muted">Fetching your saved recommendation results.</p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isHistoryLoading && historyError" class="history-item empty-item">
+        <div class="flex items-center gap-4">
+          <div class="crop-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
+          <div>
+            <h4 class="mb-1">History unavailable</h4>
+            <p class="mb-0 text-xs text-muted">{{historyError}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isHistoryLoading && !historyError" class="history-list">
+        <div *ngFor="let item of analysisHistory" class="history-item analysis-item">
+          <div class="flex items-center gap-4">
+            <div class="crop-icon"><i class="fa-solid" [ngClass]="getCropIcon(item.recommended_crop)"></i></div>
+            <div>
+              <h4 class="mb-1">{{item.recommended_crop | titlecase}}</h4>
+              <p class="mb-0 text-xs text-muted">
+                Saved {{item.created_at | date:'mediumDate'}} &bull;
+                Confidence {{item.confidence * 100 | number:'1.0-0'}}%
+              </p>
+              <p class="mb-0 text-xs text-muted">
+                N {{item.input_data.nitrogen}},
+                P {{item.input_data.phosphorus}},
+                K {{item.input_data.potassium}},
+                pH {{item.input_data.ph}}
+              </p>
+            </div>
+          </div>
+          <div class="text-right analysis-summary">
+            <div class="yield-amount text-primary">{{item.input_data.rainfall | number:'1.0-0'}} mm</div>
+            <div class="text-xs text-muted">Rainfall input</div>
+          </div>
+        </div>
+
+        <div *ngIf="analysisHistory.length === 0" class="history-item empty-item">
+          <div class="flex items-center gap-4">
+            <div class="crop-icon"><i class="fa-solid fa-seedling"></i></div>
+            <div>
+              <h4 class="mb-1">No Saved Analyses Yet</h4>
+              <p class="mb-0 text-xs text-muted">Run a recommendation and save it to build your analysis history.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
