@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AboutUsComponent } from './components/about-us/about-us.component';
 import { ContactUsComponent } from './components/contact-us/contact-us.component';
 import { HelpCentreComponent } from './components/help-centre/help-centre.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
@@ -14,6 +15,11 @@ const routes: Routes = [
     component: LandingPageComponent,
     pathMatch: 'full',
     title: 'Cropwise - AI-Powered Farming Assistant',
+  },
+  {
+    path: 'about-us',
+    component: AboutUsComponent,
+    title: 'About Us - Cropwise',
   },
   {
     path: 'login',
