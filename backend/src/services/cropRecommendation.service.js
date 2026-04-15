@@ -3,7 +3,7 @@ const path = require('path');
 
 class CropRecommendationService {
   constructor() {
-    this.datasetPath = path.resolve(__dirname, '../../data/Crop_recommendation.csv');
+    this.datasetPath = path.resolve(__dirname, '../data/Crop_recommendation.csv');
     this.records = this.loadDataset();
     this.featureRanges = this.computeFeatureRanges();
   }
