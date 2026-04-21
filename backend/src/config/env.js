@@ -31,6 +31,8 @@ module.exports = {
   supabase: {
     url: process.env.SUPABASE_URL,
     serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    keepAliveTable:
+      process.env.SUPABASE_KEEPALIVE_TABLE || "crop_recommendations",
   },
   gemini: {
     apiKey: process.env.GEMINI_API_KEY,
