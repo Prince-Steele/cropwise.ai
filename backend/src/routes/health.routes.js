@@ -27,12 +27,7 @@ router.get('/keepalive', async (req, res) => {
 
     return success(
       res,
-      {
-        supabase: 'reachable',
-        keepAliveTable: env.supabase.keepAliveTable,
-        rowsFetched: Array.isArray(response.data) ? response.data.length : 0,
-        checkedAt: new Date().toISOString(),
-      },
+      null,
       'Supabase keepalive check passed'
     );
   } catch (error) {
